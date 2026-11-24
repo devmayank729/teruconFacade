@@ -1,0 +1,473 @@
+{
+  "tail": "",
+  "groups": [
+    {
+      "name": "Home screen & doors",
+      "images": [
+        {
+          "id": "hero-facade",
+          "file": "img/studio/hero-facade.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Hero image on the home screen. A contemporary G+4 commercial building in an Indian city photographed at blue-hour dusk from across the street, eye-level three-quarter view. Floor-to-ceiling grey-tinted glass framed by warm teak wood-look vertical aluminium fins, a sandstone-clad ground floor with a glass entrance, warm 3000K facade uplighting washing the columns, clean pavement in front. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "door-inspiration",
+          "file": "img/studio/door-inspiration.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Over-the-shoulder close-up of a hand holding a smartphone; the phone screen shows a mood-board style photo of a striking modern building facade with wood fins and glass. Behind the phone, softly out of focus, an ordinary plain plaster building on an Indian street. Warm natural daylight, shallow depth of field. The hand is the only human element. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "door-guided",
+          "file": "img/studio/door-guided.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Top-down flat lay of real facade material samples on a warm linen tabletop: a teak wood-look aluminium batten, a beige sandstone tile, a champagne aluminium composite panel offcut, a natural-red terracotta baguette, and a small square of grey-tinted glass. Soft window light from the left, gentle shadows, calm editorial styling. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "door-expert",
+          "file": "img/studio/door-expert.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "An architect's desk seen at a 45° angle: a printed facade elevation drawing with dimension lines, an open RAL colour fan deck, two aluminium fin profile samples, a steel scale ruler and a mechanical pencil. Soft daylight, muted warm palette, professional and precise mood. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "sample-building",
+          "file": "img/studio/sample-building.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "IMPORTANT — this is the \"before\" photo used by \"Try a sample building\". Straight-on daytime smartphone photo of an ordinary, slightly tired G+3 (four-storey) commercial building in an Indian city, taken from across the road with the whole front in frame. Plain painted plaster facade in faded cream, rows of simple aluminium-framed windows, a glass shopfront with an entrance door on the ground floor, a flat parapet on top. Bright overcast daylight, a little street context at the edges, realistic and unretouched. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        }
+      ]
+    },
+    {
+      "name": "Building types (Door 2 cards)",
+      "images": [
+        {
+          "id": "type-residential",
+          "file": "img/studio/type-residential.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A modern G+2 independent house / villa in a quiet Indian residential lane: white plaster walls, warm wood-look cladding accents, glass balcony railings, a small landscaped front garden. Daylight, eye-level three-quarter view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "type-retail",
+          "file": "img/studio/type-retail.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A two-storey retail showroom on an Indian high street: a large structural-glass shopfront, a champagne ACP fascia above it, a clean pavement in front. Daylight, eye-level three-quarter view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "type-corporate",
+          "file": "img/studio/type-corporate.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A seven-storey corporate office building in an Indian IT park: blue-grey glass curtain wall with dark aluminium vertical fins, a landscaped forecourt with a drop-off. Daylight, slightly low three-quarter view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "type-hospitality",
+          "file": "img/studio/type-hospitality.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A six-storey boutique hotel in India: sandstone-clad base, warm wood-look accents on the upper floors, a covered porte-cochère entrance, palms in the forecourt. Late-afternoon light, eye-level three-quarter view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "type-commercial",
+          "file": "img/studio/type-commercial.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A G+3 commercial complex on a busy Indian road: shops on the ground floor, offices above, a facade of grey ACP panels and ribbon glazing. Daylight, eye-level three-quarter view, no visible signage text. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "type-institutional",
+          "file": "img/studio/type-institutional.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A four-storey college / hospital building in India: horizontal terracotta baguettes alternating with glass bands, a broad landscaped forecourt and entrance canopy. Daylight, eye-level three-quarter view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "type-industrial",
+          "file": "img/studio/type-industrial.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A single-storey factory / warehouse in an Indian industrial estate: insulated grey metal wall panels, two loading-dock shutters, a clean two-storey office block at the front corner. Daylight, wide eye-level view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "type-other",
+          "file": "img/studio/type-other.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A mixed-use community building in India: an off-white GRC jaali screen across the upper floor, warm sandstone walls below, a generous shaded entrance. Daylight, eye-level three-quarter view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        }
+      ]
+    },
+    {
+      "name": "Facade systems (Door 2 looks, Door 3 systems, home carousel)",
+      "images": [
+        {
+          "id": "system-glass",
+          "file": "img/studio/system-glass.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Medium close view of a modern glass curtain wall facade: grey-tinted glazing units with slim aluminium mullions, reflecting a blue sky with soft clouds, camera looking slightly up. Subject centred so the image crops well to both portrait and landscape. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "system-acp",
+          "file": "img/studio/system-acp.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Medium close view of a facade clad in flat aluminium composite panels (ACP), satin warm-grey finish, crisp 10 mm shadow grooves in a neat grid around punched windows, low sun raking across the surface. Subject centred. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "system-aluminium",
+          "file": "img/studio/system-aluminium.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Facade with deep vertical aluminium fins in a dark bronze powder-coat at a regular 600 mm rhythm in front of glazing, strong rhythmic shadows, daylight, slight angle along the facade. Subject centred. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "system-metal",
+          "file": "img/studio/system-metal.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Facade screen of perforated metal panels with a round-hole pattern in a bronze finish, the wall and windows faintly visible through the perforations, daylight, slight angle. Subject centred. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "system-stone",
+          "file": "img/studio/system-stone.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Facade clad in large-format beige sandstone slabs with fine joints, honed finish, warm afternoon light emphasising the natural texture. Subject centred. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "system-pustone",
+          "file": "img/studio/system-pustone.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "A facade feature wall in lightweight PU stone panels with a realistic stacked-stone texture in grey-beige tones, deep relief and soft shadows, daylight. Subject centred. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "system-hpl",
+          "file": "img/studio/system-hpl.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Facade clad in exterior-grade HPL panels with a warm walnut wood décor, visible slim panel joints, punched windows, daylight. Subject centred. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "system-grc",
+          "file": "img/studio/system-grc.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Facade screen of off-white GRC panels with an intricate geometric Indian jaali lattice, sunlight casting patterned shadows on the wall behind. Subject centred. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "system-terracotta",
+          "file": "img/studio/system-terracotta.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Facade with horizontal natural-red terracotta baguettes at close spacing in front of glazing, warm earthy tones, daylight, slight angle along the facade. Subject centred. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "system-wood",
+          "file": "img/studio/system-wood.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Facade with vertical wood-look aluminium battens in a teak tone with slim shadow gaps, on a modern residential building, daylight. Subject centred. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        }
+      ]
+    },
+    {
+      "name": "System subtypes (Door 3)",
+      "images": [
+        {
+          "id": "sub-glass-structural",
+          "file": "img/studio/sub-glass-structural.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Structurally glazed facade with no visible exterior frames: flush glass panes separated only by thin black silicone joints, reflective, looking up at an angle. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "sub-glass-semi",
+          "file": "img/studio/sub-glass-semi.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Semi-structural glazing: flush glass panels with slim horizontal aluminium pressure caps and vertical silicone joints, daylight reflections. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "sub-glass-spider",
+          "file": "img/studio/sub-glass-spider.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Spider-fitting glass facade: large clear glass panels held by stainless-steel four-arm spider fittings on a steel mast, a double-height entrance atrium seen from outside. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "sub-aluminium-louvers",
+          "file": "img/studio/sub-aluminium-louvers.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Horizontal aluminium louvers across a facade, silver-grey, angled blades casting striped shadows, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "sub-aluminium-cladding",
+          "file": "img/studio/sub-aluminium-cladding.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Flat solid aluminium sheet cladding with vertical standing seams, anodised champagne finish, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "sub-metal-solid",
+          "file": "img/studio/sub-metal-solid.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Solid folded metal facade panels in charcoal grey with crisp folds catching the light, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "sub-metal-expanded",
+          "file": "img/studio/sub-metal-expanded.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Expanded-metal mesh facade screen with a diamond mesh in bronze anodised finish, a building wall visible behind, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "sub-stone-granite",
+          "file": "img/studio/sub-stone-granite.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Facade of polished dark grey granite slabs with fine joints and soft reflections, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "sub-stone-marble",
+          "file": "img/studio/sub-stone-marble.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Facade of white marble slabs with soft grey veining, honed finish, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "sub-stone-engineered",
+          "file": "img/studio/sub-stone-engineered.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Facade of engineered quartz-stone panels in a uniform light grey with precise joints, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "sub-terracotta-panels",
+          "file": "img/studio/sub-terracotta-panels.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Rectangular terracotta rainscreen panels laid in a staggered pattern, natural red with gentle tonal variation, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        }
+      ]
+    },
+    {
+      "name": "Inspiration gallery (Door 1)",
+      "images": [
+        {
+          "id": "inspo-glass-fins",
+          "file": "img/studio/inspo-glass-fins.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Modern corporate building in an Indian city: full-height grey-tinted glass with bronze vertical aluminium fins, daylight, eye-level three-quarter view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "inspo-wood-stone",
+          "file": "img/studio/inspo-wood-stone.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Warm contemporary building: off-white walls, teak wood-look vertical battens and a sandstone-clad base, photographed at dusk with warm uplighting, eye-level three-quarter view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "inspo-terracotta",
+          "file": "img/studio/inspo-terracotta.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Earthy institutional building: horizontal terracotta baguettes alternating with glass curtain-wall bands, daylight, eye-level three-quarter view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "reference-showroom",
+          "file": "img/studio/reference-showroom.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Premium retail showroom: champagne ACP cladding, a structural-glass shopfront and dark aluminium fins, daylight, eye-level three-quarter view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        }
+      ]
+    },
+    {
+      "name": "Makeover depth (Door 2)",
+      "images": [
+        {
+          "id": "treat-full",
+          "file": "img/studio/treat-full.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A G+3 building with a complete brand-new facade: the whole front re-clad in crisp grey ACP panels and glass, everything looks new. Daylight, straight-on three-quarter view. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "treat-overclad",
+          "file": "img/studio/treat-overclad.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A G+3 building where modern cladding has been added over the existing wall: the original window pattern is kept, but the walls are wrapped in new warm-grey panels with wood-look accents. Daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "treat-accent",
+          "file": "img/studio/treat-accent.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A plain plaster G+3 building where only the entrance portal and the top parapet band are upgraded in dark bronze metal and wood-look panels; the rest of the walls are simply repainted. Daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        }
+      ]
+    },
+    {
+      "name": "Mood & glass (Door 2)",
+      "images": [
+        {
+          "id": "tone-light",
+          "file": "img/studio/tone-light.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Light & airy facade: white and pale-beige panels, clear glass and light oak-look accents, bright daylight, airy and fresh. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "tone-warm",
+          "file": "img/studio/tone-warm.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Warm & balanced facade: beige sandstone, teak wood-look battens and bronze accents in golden afternoon light. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "tone-bold",
+          "file": "img/studio/tone-bold.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Bold & dark facade: charcoal ACP, black aluminium fins and dark bronze glass, dramatic contrast, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "glass-min",
+          "file": "img/studio/glass-min.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A building facade that is mostly solid wall with small punched windows (about 15 % glass), daylight, straight-on. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "glass-balanced",
+          "file": "img/studio/glass-balanced.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A building facade with balanced glass and solid (about 35 % glass): horizontal ribbon windows between solid bands, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "glass-max",
+          "file": "img/studio/glass-max.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A building facade with maximum glass (60 % or more): floor-to-ceiling glazing with slim frames, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        }
+      ]
+    },
+    {
+      "name": "Surface finish swatches",
+      "images": [
+        {
+          "id": "finish-matte",
+          "file": "img/studio/finish-matte.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Extreme close-up of a matte powder-coated facade panel in warm grey: no reflections, fine even texture, soft side light. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "finish-satin",
+          "file": "img/studio/finish-satin.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Extreme close-up of a satin-finish aluminium composite panel with a soft, low sheen, soft side light. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "finish-metallic",
+          "file": "img/studio/finish-metallic.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Extreme close-up of a metallic champagne facade panel with fine metallic flake sparkle, soft side light. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "finish-brushed",
+          "file": "img/studio/finish-brushed.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Extreme close-up of brushed aluminium with a fine directional grain, soft side light. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "finish-wood",
+          "file": "img/studio/finish-wood.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Extreme close-up of a wood-grain finish aluminium batten in teak, realistic printed grain, soft side light. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "finish-stone",
+          "file": "img/studio/finish-stone.jpg",
+          "size": "1024 × 1024 (square 1:1)",
+          "prompt": "Extreme close-up of a stone-finish facade panel with a sandstone texture, soft side light. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        }
+      ]
+    },
+    {
+      "name": "Pattern (Door 2)",
+      "images": [
+        {
+          "id": "pattern-flat",
+          "file": "img/studio/pattern-flat.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Facade of clean, flat panels with minimal joints, calm and seamless, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "pattern-vertical",
+          "file": "img/studio/pattern-vertical.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Facade that emphasises vertical lines: tall narrow panels and vertical grooves, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "pattern-horizontal",
+          "file": "img/studio/pattern-horizontal.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Facade with strong horizontal bands and lines running the full width, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "pattern-fins",
+          "file": "img/studio/pattern-fins.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Facade with linear projecting fins at a regular rhythm, strong shadows, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "pattern-geometric",
+          "file": "img/studio/pattern-geometric.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Facade with a geometric pattern of triangulated / diamond panels, daylight. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        }
+      ]
+    },
+    {
+      "name": "Lighting (Door 2)",
+      "images": [
+        {
+          "id": "light-day",
+          "file": "img/studio/light-day.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A modern G+4 facade in bright daylight, no artificial lighting. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "light-uplight",
+          "file": "img/studio/light-uplight.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "The same kind of modern G+4 facade at dusk, with warm 3000K uplights at ground level washing the walls and columns. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "light-linear",
+          "file": "img/studio/light-linear.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "A modern G+4 facade at dusk with sleek warm-white linear LED strips along every slab edge and the parapet. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        }
+      ]
+    },
+    {
+      "name": "Signage (Door 2)",
+      "images": [
+        {
+          "id": "sign-board",
+          "file": "img/studio/sign-board.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Close view of a building entrance with a dark matte name board above the door carrying clean white sans-serif letters reading \"ARVIN\". Daylight. Photorealistic architectural photograph, true-to-life materials, crisp detail, no people, no watermark."
+        },
+        {
+          "id": "sign-logo",
+          "file": "img/studio/sign-logo.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Close view of a building entrance with a square bronze logo panel showing a simple abstract emblem, mounted beside the door. Daylight. Photorealistic architectural photograph, true-to-life materials, crisp detail, no people, no watermark."
+        },
+        {
+          "id": "sign-letters",
+          "file": "img/studio/sign-letters.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Close view of raised 3D brushed stainless-steel letters reading \"ARVIN\" mounted directly on a sandstone wall, with a soft halo glow behind them at dusk. Photorealistic architectural photograph, true-to-life materials, crisp detail, no people, no watermark."
+        }
+      ]
+    },
+    {
+      "name": "Result designs (generate from sample-building)",
+      "images": [
+        {
+          "id": "result-modern",
+          "file": "img/studio/result-modern.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Attach img/studio/sample-building.jpg. Redesign ONLY the facade cladding of the building in this photo. Keep the exact building shape, number of floors, window and door positions, railings, camera angle, sky and street. MODERN style: crisp grey ACP panels with dark aluminium vertical fins and strong contrast. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "result-contemporary",
+          "file": "img/studio/result-contemporary.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Attach img/studio/sample-building.jpg. Redesign ONLY the facade cladding of the building in this photo. Keep the exact building shape, number of floors, window and door positions, railings, camera angle, sky and street. CONTEMPORARY style: a warmer mix of teak wood-look vertical battens, a sandstone base and bronze accents with a vertical rhythm. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "result-minimalist",
+          "file": "img/studio/result-minimalist.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Attach img/studio/sample-building.jpg. Redesign ONLY the facade cladding of the building in this photo. Keep the exact building shape, number of floors, window and door positions, railings, camera angle, sky and street. MINIMALIST style: one calm material — off-white flat panels with very few joints. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        },
+        {
+          "id": "result-premium",
+          "file": "img/studio/result-premium.jpg",
+          "size": "1536 × 1024 (landscape 3:2)",
+          "prompt": "Attach img/studio/sample-building.jpg. Redesign ONLY the facade cladding of the building in this photo. Keep the exact building shape, number of floors, window and door positions, railings, camera angle and street. PREMIUM style: champagne metallic panels, deeper bronze glass and integrated linear LED light lines, shown at dusk. Photorealistic architectural photograph, true-to-life materials and colours, crisp detail, natural 35 mm lens, soft realistic shadows, no people, no text, no logos, no watermark."
+        }
+      ]
+    }
+  ]
+}

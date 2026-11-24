@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ext-resource-dependency" content="three.module.js" data-resource-id="three">
+<meta name="ext-resource-dependency" content="facade3d-v4.js" data-resource-id="fx3d">
+<meta name="ext-resource-dependency" content="studio-images.json" data-resource-id="prompts">
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" data-bg-color="#E1D4C2"><rect width="100" height="100" fill="#E1D4C2"/><g fill="none" stroke="#291C0E" stroke-width="3" stroke-linejoin="round"><path d="M32 72V38l18-10 18 10v34z"/><path d="M41 72V58h18v14M40 44h6M54 44h6"/></g></svg></template>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="theme-color" content="#1F150A">
+<title>Facade Studio — Terucon India</title>
+<style>
+@keyframes tcRise { from { opacity: 0; transform: translateY(12px); } }
+@keyframes tcFade { from { opacity: 0; } }
+@keyframes tcSpin { to { transform: rotate(360deg); } }
+@keyframes tcScan { from { top: 4%; } to { top: 94%; } }
+html { background: #E1D4C2; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: #E1D4C2; color: #291C0E; font-family: Switzer, "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-wrap: break-word; }
+*, *::before, *::after { box-sizing: border-box; }
+a { color: #291C0E; } a:hover { color: #6E473B; }
+::selection { background: #6E473B; color: #E1D4C2; }
+button, input, textarea, select { font: inherit; }
+input[type=range] { -webkit-appearance: auto; }
+:focus-visible { outline: 2px solid #F5B357; outline-offset: 2px; }
+</style>
+</helmet>
+<div style="min-height:100vh; min-height:100dvh; background:#E1D4C2; color:#291C0E; font-family:Switzer, 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;">
+
+  <div style="position:sticky; top:0; z-index:50; padding:{{ L.hdrPad }}; background:linear-gradient(#E1D4C2 72%, rgba(225,212,194,0));">
+    <header data-screen-label="Header" style="display:flex; align-items:center; gap:10px; height:{{ L.hdrIn }}px; max-width:1520px; margin:0 auto; padding:0 6px 0 18px; border-radius:999px; background:#291C0E; color:#E1D4C2; box-shadow:0 14px 30px -18px rgba(0,0,0,.6);">
+      <button type="button" onClick="{{ onHome }}" aria-label="Facade Studio home" style="display:inline-flex; align-items:center; min-height:44px; padding:0; border:0; background:none; cursor:pointer;"><span style="font:400 21px/1 Zodiak, Georgia, serif; letter-spacing:.02em; color:#F4ECE0; white-space:nowrap;">Terucon</span></button>
+      <sc-if value="{{ L.showTitle }}" hint-placeholder-val="{{ true }}">
+        <span style="display:flex; align-items:center; gap:14px; min-width:0; font:300 20px/1.2 Zodiak, Georgia, serif; white-space:nowrap;"><span style="width:1px; height:22px; background:rgba(225,212,194,.24);"></span>Facade Studio</span>
+      </sc-if>
+      <span style="flex:1 1 auto;"></span>
+      <sc-if value="{{ L.showDoor }}" hint-placeholder-val="{{ false }}">
+        <span style="display:inline-flex; align-items:center; gap:8px; min-height:32px; padding:0 12px; border-radius:999px; border:1px solid rgba(225,212,194,.2); font:500 12.5px/1 Switzer, Helvetica, Arial, sans-serif; color:rgba(244,236,224,.85); white-space:nowrap;"><span style="width:6px; height:6px; border-radius:50%; background:#F5B357;"></span>{{ doorLabel }}</span>
+      </sc-if>
+      <sc-if value="{{ inFlow }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{ onExit }}" style="min-height:44px; padding:0 16px; border:0; border-radius:999px; background:rgba(225,212,194,.12); color:#F4ECE0; font:500 13.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer; white-space:nowrap;" style-hover="background:rgba(225,212,194,.2);">Save &amp; exit</button>
+      </sc-if>
+      <a href="#" aria-label="Account" style="display:inline-grid; place-items:center; flex:none; width:44px; height:44px; border-radius:50%; color:#E1D4C2; text-decoration:none;"><span style="display:grid; place-items:center; width:34px; height:34px; border-radius:50%; background:rgba(225,212,194,.16);"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round;"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M4.8 20c.8-3.6 3.8-5.4 7.2-5.4s6.4 1.8 7.2 5.4"></path></svg></span></a>
+    </header>
+  </div>
+
+  <sc-if value="{{ isIntro }}" hint-placeholder-val="{{ true }}">
+    <main data-screen-label="01 Intro" style="max-width:1520px; margin:0 auto; padding:{{ L.introPad }}; display:flex; flex-direction:column; gap:{{ L.introGap }}px;">
+      <section style="display:grid; grid-template-columns:{{ L.heroCols }}; gap:clamp(20px, 4vw, 56px); align-items:center; animation:tcRise .6s cubic-bezier(.2,.8,.2,1) both;">
+        <div style="display:flex; flex-direction:column; gap:20px; min-width:0;">
+          <p style="display:flex; align-items:center; gap:14px; margin:0; font:500 10.5px/1 Switzer, Helvetica, Arial, sans-serif; letter-spacing:.22em; text-transform:uppercase; color:#6E473B;"><span style="width:32px; height:1px; background:currentColor;"></span>AI Digital Studio · Facades</p>
+          <h1 style="margin:0; font:300 clamp(38px, 6vw, 74px)/1 Zodiak, Georgia, serif; letter-spacing:-.025em; text-wrap:balance;">Reimagine your building. <em style="font-style:italic; color:#6E473B;">Design your facade with AI.</em></h1>
+          <p style="margin:0; max-width:46ch; font:400 clamp(16px, 1.8vw, 18px)/1.6 Switzer, Helvetica, Arial, sans-serif; color:#6E473B; text-wrap:pretty;">Share a photo of your building and tell us what you like. Terucon AI builds a live 3D model as you choose, creates four facade designs, then gives you an approximate estimate at the end — your windows and doors stay exactly as they are.</p>
+          <sc-if value="{{ I.hasDraft }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; padding:12px 14px 12px 18px; border-radius:18px; background:rgba(255,255,255,.45); border:1px solid rgba(41,28,14,.16);">
+              <span style="flex:1 1 180px; font:500 14.5px/1.4 Switzer, Helvetica, Arial, sans-serif;">{{ I.draftText }}</span>
+              <button type="button" onClick="{{ I.onResume }}" style="min-height:44px; padding:0 18px; border:0; border-radius:999px; background:#291C0E; color:#F4ECE0; font:500 14px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Continue</button>
+              <button type="button" onClick="{{ I.onDiscard }}" style="min-height:44px; padding:0 8px; border:0; background:none; color:#6E473B; font:500 14px/1 Switzer, Helvetica, Arial, sans-serif; text-decoration:underline; text-underline-offset:4px; cursor:pointer;">Discard</button>
+            </div>
+          </sc-if>
+        </div>
+        <div style="position:relative; aspect-ratio:{{ L.heroAR }}; border-radius:28px; overflow:hidden; background:#cbbba6; box-shadow:0 40px 70px -40px rgba(41,28,14,.7);">
+          <sc-if value="{{ I.hero.hasImg }}"><span role="img" aria-label="A finished Terucon facade at dusk" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:tcFade .8s ease both; background:url({{ I.hero.img }}) center / cover no-repeat;"></span></sc-if>
+          <sc-if value="{{ I.hero.isPh }}"><span style="position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-start; align-items:flex-start; gap:8px; padding:16px; background:repeating-linear-gradient(135deg,#3a2a1a 0 10px,#433120 10px 20px);"><sc-if value="{{ I.hero.hasPh }}"><span style="padding:4px 7px; border-radius:6px; background:rgba(249,244,234,.92); font:500 10.5px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; color:#6E473B; overflow-wrap:anywhere;">{{ I.hero.ph }}</span></sc-if><sc-if value="{{ I.hero.canCopy }}"><button type="button" onClick="{{ I.hero.onCopy }}" style="min-height:32px; padding:0 12px; border:0; border-radius:999px; background:#F5B357; color:#1F150A; font:600 11.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Copy ChatGPT prompt</button></sc-if></span></sc-if>
+          <span style="position:absolute; left:14px; bottom:14px; display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:rgba(21,16,10,.66); color:#F4ECE0; font:500 12px/1 Switzer, Helvetica, Arial, sans-serif; backdrop-filter:blur(8px);"><span style="width:6px; height:6px; border-radius:50%; background:#F5B357;"></span>Glass, wood-look fins and stone · Terucon</span>
+        </div>
+      </section>
+
+      <section data-screen-label="02 Choose a door" style="display:flex; flex-direction:column; gap:18px;">
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <p style="display:flex; align-items:center; gap:14px; margin:0; font:500 10.5px/1 Switzer, Helvetica, Arial, sans-serif; letter-spacing:.22em; text-transform:uppercase; color:#6E473B;"><span style="width:32px; height:1px; background:currentColor;"></span>Three ways in</p>
+          <h2 style="margin:0; font:300 clamp(28px, 3.6vw, 44px)/1.05 Zodiak, Georgia, serif; letter-spacing:-.02em; text-wrap:balance;">How would you like <em style="font-style:italic; color:#6E473B;">to begin?</em></h2>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap:14px;">
+          <sc-for list="{{ I.doors }}" as="d" hint-placeholder-count="3">
+            <div role="button" tabindex="0" onClick="{{ d.onClick }}" onKeyDown="{{ d.onKey }}" style="display:flex; flex-direction:column; border-radius:24px; overflow:hidden; background:#291C0E; color:#F4ECE0; cursor:pointer; box-shadow:0 24px 44px -30px rgba(41,28,14,.9); transition:transform .25s cubic-bezier(.2,.8,.2,1);" style-hover="transform:translateY(-4px);">
+              <div style="position:relative; aspect-ratio:3 / 2; background:#3a2a1a; overflow:hidden;">
+                <sc-if value="{{ d.hasImg }}"><span aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:tcFade .4s ease both; background:url({{ d.img }}) center / cover no-repeat;"></span></sc-if>
+                <sc-if value="{{ d.isPh }}"><span style="position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-start; gap:8px; padding:12px; background:repeating-linear-gradient(135deg,#3a2a1a 0 10px,#433120 10px 20px);"><sc-if value="{{ d.hasPh }}"><span style="padding:4px 7px; border-radius:6px; background:rgba(249,244,234,.92); font:500 10.5px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; color:#6E473B; overflow-wrap:anywhere;">{{ d.ph }}</span></sc-if><sc-if value="{{ d.canCopy }}"><button type="button" onClick="{{ d.onCopy }}" style="min-height:32px; padding:0 12px; border:0; border-radius:999px; background:#F5B357; color:#1F150A; font:600 11.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Copy ChatGPT prompt</button></sc-if></span></sc-if>
+                <span style="position:absolute; top:12px; left:12px; padding:6px 10px; border-radius:999px; background:rgba(21,16,10,.7); color:#F4ECE0; font:500 11.5px/1 Switzer, Helvetica, Arial, sans-serif; backdrop-filter:blur(6px);">{{ d.time }}</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px; padding:18px 18px 20px; flex:1 1 auto;">
+                <span style="font:500 10.5px/1 Switzer, Helvetica, Arial, sans-serif; letter-spacing:.18em; text-transform:uppercase; color:#F5B357;">{{ d.eyebrow }}</span>
+                <span style="font:300 26px/1.1 Zodiak, Georgia, serif; letter-spacing:-.01em;">{{ d.label }}</span>
+                <span style="font:400 14px/1.55 Switzer, Helvetica, Arial, sans-serif; color:rgba(244,236,224,.76); text-wrap:pretty;">{{ d.sub }}</span>
+                <span style="margin-top:auto; padding-top:10px; display:inline-flex; align-items:center; gap:10px; font:500 14.5px/1 Switzer, Helvetica, Arial, sans-serif;">{{ d.cta }}<span style="display:grid; place-items:center; width:36px; height:36px; border-radius:50%; background:#F5B357; color:#1F150A;"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section data-screen-label="03 Facade systems" style="display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:10px 20px;">
+          <div style="display:flex; flex-direction:column; gap:8px; min-width:0;">
+            <p style="display:flex; align-items:center; gap:14px; margin:0; font:500 10.5px/1 Switzer, Helvetica, Arial, sans-serif; letter-spacing:.22em; text-transform:uppercase; color:#6E473B;"><span style="width:32px; height:1px; background:currentColor;"></span>Facade &amp; glazing systems</p>
+            <h2 style="margin:0; font:300 clamp(26px, 3.2vw, 40px)/1.05 Zodiak, Georgia, serif; letter-spacing:-.02em;">Or start from a material <em style="font-style:italic; color:#6E473B;">you already like.</em></h2>
+          </div>
+          <p style="margin:0; max-width:40ch; font:400 14.5px/1.5 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">Tap one and we open the guided studio with it already chosen.</p>
+        </div>
+        <div style="display:grid; grid-auto-flow:column; grid-auto-columns:{{ L.railCol }}; gap:12px; overflow-x:auto; padding:2px 2px 12px; scroll-snap-type:x mandatory; overscroll-behavior-x:contain;">
+          <sc-for list="{{ I.systems }}" as="o" hint-placeholder-count="5">
+            <div role="button" tabindex="0" onClick="{{ o.onClick }}" onKeyDown="{{ o.onKey }}" style="position:relative; aspect-ratio:4 / 5; border-radius:22px; overflow:hidden; background:#3a2a1a; color:#F4ECE0; cursor:pointer; scroll-snap-align:start;" style-hover="transform:translateY(-3px);">
+              <sc-if value="{{ o.hasImg }}"><span aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:tcFade .4s ease both; background:url({{ o.img }}) center / cover no-repeat;"></span></sc-if>
+              <sc-if value="{{ o.isPh }}"><span style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:flex-start; gap:8px; padding:12px; background:repeating-linear-gradient(135deg,#3a2a1a 0 10px,#433120 10px 20px);"><sc-if value="{{ o.hasPh }}"><span style="padding:4px 7px; border-radius:6px; background:rgba(249,244,234,.92); font:500 10.5px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; color:#6E473B; overflow-wrap:anywhere;">{{ o.ph }}</span></sc-if><sc-if value="{{ o.canCopy }}"><button type="button" onClick="{{ o.onCopy }}" style="min-height:32px; padding:0 12px; border:0; border-radius:999px; background:#F5B357; color:#1F150A; font:600 11.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Copy ChatGPT prompt</button></sc-if></span></sc-if>
+              <span style="position:absolute; inset:auto 0 0 0; height:62%; background:linear-gradient(rgba(21,16,10,0), rgba(21,16,10,.86));"></span>
+              <span style="position:absolute; left:16px; right:16px; bottom:16px; display:flex; flex-direction:column; gap:5px;"><span style="font:300 24px/1.05 Zodiak, Georgia, serif;">{{ o.label }}</span><span style="font:400 13px/1.4 Switzer, Helvetica, Arial, sans-serif; color:rgba(244,236,224,.8);">{{ o.sub }}</span></span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span style="display:inline-flex; align-items:center; min-height:36px; padding:0 14px; border-radius:999px; border:1px solid rgba(41,28,14,.16); font:500 13px/1 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">Windows, doors &amp; railings always preserved</span>
+          <span style="display:inline-flex; align-items:center; min-height:36px; padding:0 14px; border-radius:999px; border:1px solid rgba(41,28,14,.16); font:500 13px/1 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">Four design variations</span>
+          <span style="display:inline-flex; align-items:center; min-height:36px; padding:0 14px; border-radius:999px; border:1px solid rgba(41,28,14,.16); font:500 13px/1 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">Interactive 3D model</span>
+        </div>
+      </section>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ inFlow }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid; grid-template-columns:{{ L.cols }}; gap:{{ L.gap }}px; align-items:start; max-width:1520px; margin:0 auto; padding:{{ L.pad }};">
+
+      <aside data-screen-label="Live preview" style="order:{{ L.pvOrder }}; position:{{ L.pvPos }}; top:{{ L.pvTop }}px; z-index:20; display:flex; flex-direction:column; gap:12px; min-width:0; height:{{ L.pvH }}; overflow-y:{{ L.pvOverflow }};">
+        <sc-if value="{{ L.pvBar }}">
+          <button type="button" onClick="{{ pv.onToggle }}" aria-expanded="{{ pv.open }}" style="display:flex; align-items:center; gap:12px; width:100%; min-height:60px; padding:6px 14px 6px 6px; border:0; border-radius:18px; background:#291C0E; color:#F4ECE0; text-align:left; cursor:pointer; box-shadow:0 14px 28px -18px rgba(0,0,0,.7);">
+            <span style="flex:none; width:48px; height:48px; border-radius:13px; overflow:hidden; background:#3a2a1a;"><sc-if value="{{ pv.hasThumb }}"><span aria-hidden="true" style="display:block; width:100%; height:100%; object-fit:cover; background:url({{ pv.thumb }}) center / cover no-repeat;"></span></sc-if></span>
+            <span style="flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:4px;"><span style="font:500 10px/1 Switzer, Helvetica, Arial, sans-serif; letter-spacing:.16em; text-transform:uppercase; color:rgba(244,236,224,.6);">Live 3D preview</span><span style="font:600 15px/1.2 Switzer, Helvetica, Arial, sans-serif; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ pv.barText }}</span></span>
+            <span style="flex:none; display:inline-flex; align-items:center; gap:6px; font:500 13px/1 Switzer, Helvetica, Arial, sans-serif; color:#F5B357;">{{ pv.toggleLabel }}<svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; transform:rotate({{ pv.chev }}deg); transition:transform .2s;"><path d="m6 9 6 6 6-6"></path></svg></span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ L.pvFull }}">
+          <div style="position:relative; flex:{{ L.stageFlex }}; width:100%; aspect-ratio:{{ L.stageAR }}; min-height:{{ L.stageMin }}px; max-height:{{ L.stageMaxH }}; border-radius:22px; overflow:hidden; background:#1F150A; container-type:size; animation:tcFade .3s ease both;">
+            <sc-if value="{{ pv.isPhoto }}">
+              <div style="position:absolute; inset:0; display:grid; place-items:center;">
+                <div style="position:relative; width:min(100cqw, calc(100cqh * {{ pv.ar }})); aspect-ratio:{{ pv.ar }};">
+                  <span role="img" aria-label="Your building" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:url({{ pv.url }}) center / cover no-repeat;"></span>
+                  <sc-if value="{{ pv.brush }}"><canvas ref="{{ maskRef }}" aria-label="Brush over the areas to redesign" style="position:absolute; inset:0; width:100%; height:100%; touch-action:none; cursor:crosshair;"></canvas></sc-if>
+                  <sc-if value="{{ pv.scan }}"><span style="position:absolute; left:3%; right:3%; height:2px; background:#F5B357; box-shadow:0 0 16px 3px rgba(245,179,87,.7); animation:tcScan 1.6s ease-in-out infinite alternate;"></span></sc-if>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ pv.isRef }}">
+              <div style="position:absolute; inset:0; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:2px;">
+                <span style="position:relative; overflow:hidden; background:#2a1d10;"><span role="img" aria-label="Your building" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:url({{ pv.url }}) center / cover no-repeat;"></span><span style="position:absolute; left:10px; bottom:10px; padding:5px 9px; border-radius:999px; background:rgba(21,16,10,.7); color:#F4ECE0; font:500 11px/1 Switzer, Helvetica, Arial, sans-serif;">Your building</span></span>
+                <span style="position:relative; overflow:hidden; background:#2a1d10;"><sc-if value="{{ pv.hasRefImg }}"><span role="img" aria-label="Inspiration" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:url({{ pv.refUrl }}) center / cover no-repeat;"></span></sc-if><span style="position:absolute; left:10px; bottom:10px; padding:5px 9px; border-radius:999px; background:#F5B357; color:#1F150A; font:600 11px/1 Switzer, Helvetica, Arial, sans-serif;">Inspiration</span></span>
+              </div>
+            </sc-if>
+            <sc-if value="{{ pv.is3d }}">
+              <div ref="{{ glRef }}" style="position:absolute; inset:0;"></div>
+              <sc-if value="{{ pv.fxMsg }}"><span style="position:absolute; inset:0; display:grid; place-items:center; padding:20px; text-align:center; font:500 13.5px/1.5 Switzer, Helvetica, Arial, sans-serif; color:rgba(244,236,224,.7);">{{ pv.fxText }}</span></sc-if>
+              <sc-if value="{{ pv.fxReady }}"><div style="position:absolute; right:10px; top:10px; z-index:3; display:flex; flex-direction:column; gap:2px; padding:4px; border-radius:22px; background:rgba(21,16,10,.62); backdrop-filter:blur(8px);"><button type="button" aria-label="Zoom in" title="Zoom in" onClick="{{ pv.onZoomIn }}" style="display:grid; place-items:center; width:36px; height:36px; padding:0; border:0; border-radius:50%; background:transparent; color:#F4ECE0; cursor:pointer;" style-hover="background:rgba(244,236,224,.16);"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;"><path d="M12 5v14M5 12h14"></path></svg></button><button type="button" aria-label="Zoom out" title="Zoom out" onClick="{{ pv.onZoomOut }}" style="display:grid; place-items:center; width:36px; height:36px; padding:0; border:0; border-radius:50%; background:transparent; color:#F4ECE0; cursor:pointer;" style-hover="background:rgba(244,236,224,.16);"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;"><path d="M5 12h14"></path></svg></button><button type="button" aria-label="Reset view" title="Reset view" onClick="{{ pv.onReset }}" style="display:grid; place-items:center; width:36px; height:36px; padding:0; border:0; border-radius:50%; background:transparent; color:#F4ECE0; cursor:pointer;" style-hover="background:rgba(244,236,224,.16);"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v3.7h3.7"></path></svg></button></div></sc-if>
+              <div style="position:absolute; right:10px; bottom:10px; z-index:3; display:flex; gap:4px; padding:4px; border-radius:999px; background:rgba(21,16,10,.62); backdrop-filter:blur(8px);">
+                <button type="button" onClick="{{ pv.onDay }}" style="min-height:32px; padding:0 12px; border:0; border-radius:999px; background:{{ pv.dayBg }}; color:{{ pv.dayInk }}; font:500 12px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Day</button>
+                <button type="button" onClick="{{ pv.onDusk }}" style="min-height:32px; padding:0 12px; border:0; border-radius:999px; background:{{ pv.duskBg }}; color:{{ pv.duskInk }}; font:500 12px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Dusk</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ pv.isEmpty }}">
+              <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:24px; text-align:center; color:#F4ECE0;">
+                <span style="font:300 22px/1.2 Zodiak, Georgia, serif;">Your building appears here</span>
+                <span style="max-width:30ch; font:400 13.5px/1.5 Switzer, Helvetica, Arial, sans-serif; color:rgba(244,236,224,.7);">Add a daytime photo of the front — or try ours to see how it works.</span>
+                <button type="button" onClick="{{ pv.onSample }}" style="min-height:44px; padding:0 18px; border:0; border-radius:999px; background:#F5B357; color:#1F150A; font:600 13.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Try a sample building</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ pv.hasTabs }}">
+              <div role="tablist" style="position:absolute; z-index:4; top:10px; left:10px; display:flex; gap:3px; padding:4px; border-radius:999px; background:rgba(21,16,10,.62); backdrop-filter:blur(8px);">
+                <sc-for list="{{ pv.tabs }}" as="t"><button type="button" role="tab" aria-selected="{{ t.on }}" onClick="{{ t.onClick }}" style="min-height:32px; padding:0 12px; border:0; border-radius:999px; background:{{ t.bg }}; color:{{ t.ink }}; font:500 12px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer; white-space:nowrap;">{{ t.label }}</button></sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ pv.hasCaption }}"><span style="position:absolute; z-index:3; left:10px; bottom:10px; max-width:calc(100% - 140px); padding:7px 11px; border-radius:999px; background:rgba(21,16,10,.66); color:#F4ECE0; font:500 11.5px/1.3 Switzer, Helvetica, Arial, sans-serif; backdrop-filter:blur(8px);">{{ pv.caption }}</span></sc-if>
+            <sc-if value="{{ pv.canClear }}"><button type="button" onClick="{{ pv.onClear }}" style="position:absolute; z-index:4; right:10px; bottom:10px; min-height:34px; padding:0 14px; border:0; border-radius:999px; background:#F4ECE0; color:#291C0E; font:600 12px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Clear brush</button></sc-if>
+          </div>
+
+          <sc-if value="{{ pv.showBrief }}">
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+              <sc-for list="{{ pv.brief }}" as="c"><span style="display:inline-flex; align-items:center; gap:7px; min-height:30px; padding:0 11px; border-radius:999px; background:rgba(255,255,255,.5); border:1px solid rgba(41,28,14,.12); font:500 12px/1 Switzer, Helvetica, Arial, sans-serif; color:#291C0E;"><sc-if value="{{ c.hasDot }}"><span style="width:12px; height:12px; border-radius:50%; background:{{ c.dot }}; box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);"></span></sc-if>{{ c.label }}</span></sc-for>
+            </div>
+          </sc-if>
+
+        </sc-if>
+      </aside>
+
+      <main data-screen-label="Questions" style="order:{{ L.qOrder }}; min-width:0; display:flex; flex-direction:column; padding-bottom:{{ L.qPadB }}px;">
+        <sc-if value="{{ L.fullProgress }}">
+          <nav aria-label="Progress" style="display:flex; gap:6px; padding:6px 0 2px;">
+            <sc-for list="{{ progress }}" as="p" hint-placeholder-count="6">
+              <button type="button" onClick="{{ p.onClick }}" aria-current="{{ p.cur }}" style="flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:7px; padding:6px 0; border:0; background:none; text-align:left; cursor:{{ p.cursor }}; color:inherit;">
+                <span style="height:4px; border-radius:4px; background:{{ p.bar }}; transition:background .3s;"></span>
+                <span style="font:500 10.5px/1.2 Switzer, Helvetica, Arial, sans-serif; letter-spacing:.07em; text-transform:uppercase; color:{{ p.ink }}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ p.label }}</span>
+              </button>
+            </sc-for>
+          </nav>
+        </sc-if>
+        <sc-if value="{{ L.miniProgress }}">
+          <div style="display:flex; flex-direction:column; gap:8px; padding:8px 0 0;">
+            <span style="height:4px; border-radius:4px; background:rgba(41,28,14,.14); overflow:hidden;"><span style="display:block; height:100%; width:{{ progPct }}%; border-radius:4px; background:#291C0E; transition:width .35s;"></span></span>
+          </div>
+        </sc-if>
+
+        <div style="display:flex; flex-direction:column; gap:10px; padding:16px 0 8px;">
+          <p style="display:flex; align-items:center; gap:14px; margin:0; font:500 10.5px/1.3 Switzer, Helvetica, Arial, sans-serif; letter-spacing:.2em; text-transform:uppercase; color:#6E473B;"><span style="flex:none; width:32px; height:1px; background:currentColor;"></span>{{ stepLine }}</p>
+          <h2 style="margin:0; font:300 clamp(30px, 4vw, 48px)/1.05 Zodiak, Georgia, serif; letter-spacing:-.02em; text-wrap:balance;">{{ stepT }} <em style="font-style:italic; color:#6E473B;">{{ stepEm }}</em></h2>
+          <p style="margin:0; max-width:56ch; font:400 15.5px/1.6 Switzer, Helvetica, Arial, sans-serif; color:#6E473B; text-wrap:pretty;">{{ stepSub }}</p>
+        </div>
+
+        <sc-if value="{{ isGen }}">
+          <section data-screen-label="Generating" style="display:flex; flex-direction:column; gap:14px; margin-top:14px; padding:22px; border-radius:22px; background:#291C0E; color:#F4ECE0; animation:tcRise .4s ease both;">
+            <span style="font:600 10.5px/1 Switzer, Helvetica, Arial, sans-serif; letter-spacing:.16em; text-transform:uppercase; color:#F5B357;">Creating your four designs</span>
+            <span style="height:6px; border-radius:6px; background:rgba(244,236,224,.14); overflow:hidden;"><span style="display:block; height:100%; width:{{ gen.pct }}%; background:#F5B357; transition:width .6s ease;"></span></span>
+            <sc-for list="{{ gen.stages }}" as="g"><div style="display:flex; align-items:center; gap:12px; opacity:{{ g.op }}; transition:opacity .3s;"><span style="flex:none; width:10px; height:10px; border-radius:50%; background:{{ g.dot }};"></span><span style="font:400 14.5px/1.45 Switzer, Helvetica, Arial, sans-serif;">{{ g.label }}</span></div></sc-for>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ isResults }}">
+          <section data-screen-label="Results" style="display:flex; flex-direction:column; gap:16px; margin-top:10px; animation:tcRise .5s ease both;">
+            <div style="position:relative; aspect-ratio:3 / 2; border-radius:24px; overflow:hidden; background:#1F150A;">
+              <sc-if value="{{ res.hasImg }}"><span role="img" aria-label="{{ res.label }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:tcFade .4s ease both; background:url({{ res.img }}) center / cover no-repeat;"></span></sc-if>
+              <sc-if value="{{ res.isPh }}"><span style="position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-start; gap:8px; padding:16px; background:repeating-linear-gradient(135deg,#3a2a1a 0 12px,#433120 12px 24px);"><sc-if value="{{ res.hasPh }}"><span style="padding:4px 7px; border-radius:6px; background:rgba(249,244,234,.92); font:500 11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; color:#6E473B;">{{ res.ph }}</span></sc-if><sc-if value="{{ res.canCopy }}"><button type="button" onClick="{{ res.onCopy }}" style="min-height:34px; padding:0 14px; border:0; border-radius:999px; background:#F5B357; color:#1F150A; font:600 12px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Copy ChatGPT prompt</button></sc-if></span></sc-if>
+              <div style="position:absolute; top:12px; left:12px; display:flex; gap:3px; padding:4px; border-radius:999px; background:rgba(21,16,10,.62); backdrop-filter:blur(8px);">
+                <button type="button" onClick="{{ res.onAfter }}" style="min-height:34px; padding:0 14px; border:0; border-radius:999px; background:{{ res.afterBg }}; color:{{ res.afterInk }}; font:500 12.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">After</button>
+                <button type="button" onClick="{{ res.onBefore }}" style="min-height:34px; padding:0 14px; border:0; border-radius:999px; background:{{ res.beforeBg }}; color:{{ res.beforeInk }}; font:500 12.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Before</button>
+              </div>
+              <span style="position:absolute; right:12px; bottom:12px; padding:8px 12px; border-radius:999px; background:rgba(21,16,10,.7); color:#F4ECE0; font:500 12.5px/1 Switzer, Helvetica, Arial, sans-serif;">{{ res.label }}</span>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(46%, 150px), 1fr)); gap:10px;">
+              <sc-for list="{{ res.vars }}" as="v">
+                <button type="button" aria-pressed="{{ v.on }}" onClick="{{ v.onClick }}" style="display:flex; flex-direction:column; padding:0; border-radius:16px; overflow:hidden; border:1.5px solid {{ v.bd }}; background:#EFE6D8; color:#291C0E; text-align:left; cursor:pointer;">
+                  <span style="position:relative; display:block; aspect-ratio:3 / 2; background:repeating-linear-gradient(135deg,#e6dccd 0 8px,#ddd1bf 8px 16px);"><sc-if value="{{ v.hasImg }}"><span aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:url({{ v.img }}) center / cover no-repeat;"></span></sc-if></span>
+                  <span style="display:flex; flex-direction:column; gap:3px; padding:9px 11px 11px;"><span style="font:600 14px/1.2 Switzer, Helvetica, Arial, sans-serif;">{{ v.label }}</span><span style="font:400 12px/1.35 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">{{ v.sub }}</span></span>
+                </button>
+              </sc-for>
+            </div>
+            <p style="margin:0; font:400 14.5px/1.6 Switzer, Helvetica, Arial, sans-serif; color:#6E473B; text-wrap:pretty;">{{ res.desc }}</p>
+            <div data-screen-label="Estimate" style="display:flex; flex-direction:column; gap:10px; padding:20px 22px; border-radius:22px; background:#F3ECE2; border:1px solid rgba(41,28,14,.14);">
+              <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 12px;">
+                <span style="font:600 10.5px/1 Switzer, Helvetica, Arial, sans-serif; letter-spacing:.16em; text-transform:uppercase; color:#6E473B;">Approximate investment</span>
+                <span style="padding:6px 10px; border-radius:999px; background:#291C0E; color:#F5B357; font:600 11.5px/1 Switzer, Helvetica, Arial, sans-serif; white-space:nowrap;">{{ est.areaLabel }}</span>
+              </div>
+              <span style="font:300 clamp(30px, 3.4vw, 42px)/1.05 Zodiak, Georgia, serif; letter-spacing:-.01em;">{{ est.range }}</span>
+              <span style="font:400 13px/1.5 Switzer, Helvetica, Arial, sans-serif; color:#6E473B; text-wrap:pretty;">{{ est.note }} · A firm quotation follows a short site visit.</span>
+              <button type="button" onClick="{{ est.onToggle }}" aria-expanded="{{ est.open }}" style="align-self:flex-start; min-height:40px; padding:0; border:0; background:none; color:#291C0E; font:600 13.5px/1 Switzer, Helvetica, Arial, sans-serif; text-decoration:underline; text-underline-offset:4px; cursor:pointer;">{{ est.toggleLabel }}</button>
+              <sc-if value="{{ est.open }}">
+                <div style="display:flex; flex-direction:column; animation:tcRise .3s ease both;">
+                  <sc-for list="{{ est.lines }}" as="l">
+                    <div style="display:flex; align-items:baseline; gap:10px; padding:10px 0; border-top:1px solid rgba(41,28,14,.12);">
+                      <span style="flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:2px;"><span style="font:500 13.5px/1.3 Switzer, Helvetica, Arial, sans-serif;">{{ l.label }}</span><span style="font:400 12px/1.35 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">{{ l.sub }}</span></span>
+                      <span style="flex:none; font:500 13px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; white-space:nowrap;">{{ l.amt }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:10px;">
+              <button type="button" onClick="{{ res.onQuote }}" style="display:inline-flex; align-items:center; gap:12px; min-height:52px; padding:4px 5px 4px 22px; border:0; border-radius:999px; background:#291C0E; color:#F4ECE0; font:500 15px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Request quotation<span style="display:grid; place-items:center; width:42px; height:42px; border-radius:50%; background:#F5B357; color:#1F150A;"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></button>
+              <button type="button" onClick="{{ res.onSave }}" style="min-height:52px; padding:0 20px; border:1px solid rgba(41,28,14,.34); border-radius:999px; background:transparent; color:#291C0E; font:500 14.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Save design</button>
+              <button type="button" onClick="{{ res.onEdit }}" style="min-height:52px; padding:0 20px; border:1px solid rgba(41,28,14,.34); border-radius:999px; background:transparent; color:#291C0E; font:500 14.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Edit my choices</button>
+              <button type="button" onClick="{{ res.onJson }}" style="min-height:52px; padding:0 16px; border:0; background:none; color:#6E473B; font:500 14px/1 Switzer, Helvetica, Arial, sans-serif; text-decoration:underline; text-underline-offset:4px; cursor:pointer;">{{ res.jsonLabel }}</button>
+            </div>
+            <sc-if value="{{ res.showJson }}">
+              <div style="display:flex; flex-direction:column; gap:10px; animation:tcRise .3s ease both;">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px;"><span style="font:500 13px/1.4 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">Structured input sent to the image model, 3D viewer and BOQ engine</span><button type="button" onClick="{{ res.onCopyJson }}" style="min-height:38px; padding:0 14px; border:0; border-radius:999px; background:#291C0E; color:#F4ECE0; font:500 12.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Copy JSON</button></div>
+                <pre style="margin:0; max-height:420px; overflow:auto; padding:16px; border-radius:16px; background:#1F150A; color:#E9DCC8; font:12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; white-space:pre-wrap; word-break:break-word;">{{ res.json }}</pre>
+              </div>
+            </sc-if>
+            <sc-if value="{{ res.sent }}">
+              <div style="display:flex; flex-direction:column; gap:6px; padding:18px; border-radius:20px; background:#291C0E; color:#F4ECE0;"><span style="font:300 24px/1.15 Zodiak, Georgia, serif;">Thank you — your request is with us.</span><span style="font:400 14px/1.5 Switzer, Helvetica, Arial, sans-serif; color:rgba(244,236,224,.78);">A Terucon facade engineer will call you within one working day with a firm quotation.</span></div>
+            </sc-if>
+          </section>
+        </sc-if>
+
+        <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="2">
+          <section id="{{ b.domId }}" style="display:flex; flex-direction:column; gap:14px; margin-top:{{ b.mt }}px; padding-top:{{ b.pt }}px; border-top:{{ b.bt }}; animation:tcRise .45s cubic-bezier(.2,.8,.2,1) both;">
+            <sc-if value="{{ b.first }}">
+              <div style="display:flex; flex-direction:column; gap:7px;">
+                <sc-if value="{{ b.hasMeta }}">
+                  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+                    <sc-if value="{{ b.showId }}"><span style="padding:5px 8px 4px; border-radius:6px; background:rgba(41,28,14,.08); font:600 10.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.04em; color:#6E473B;">{{ b.qid }}</span></sc-if>
+                    <sc-if value="{{ b.hasTag }}"><span style="padding:5px 9px 4px; border-radius:999px; border:1px solid rgba(41,28,14,.2); font:500 10.5px/1 Switzer, Helvetica, Arial, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:#6E473B;">{{ b.tag }}</span></sc-if>
+                  </div>
+                </sc-if>
+                <h3 style="margin:0; font:400 clamp(20px, 2.2vw, 25px)/1.22 Zodiak, Georgia, serif; letter-spacing:-.008em; text-wrap:balance;">{{ b.title }}</h3>
+                <sc-if value="{{ b.hasHelp }}"><p style="margin:0; max-width:62ch; font:400 14.5px/1.55 Switzer, Helvetica, Arial, sans-serif; color:#6E473B; text-wrap:pretty;">{{ b.help }}</p></sc-if>
+              </div>
+            </sc-if>
+            <sc-if value="{{ b.hasPart }}"><p style="margin:0; font:600 11.5px/1.3 Switzer, Helvetica, Arial, sans-serif; letter-spacing:.12em; text-transform:uppercase; color:#6E473B;">{{ b.part }}</p></sc-if>
+
+            <sc-if value="{{ b.isPhoto }}">
+              <sc-if value="{{ b.has }}">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px 14px; padding:10px; border-radius:18px; background:rgba(255,255,255,.45); border:1px solid rgba(41,28,14,.16);">
+                  <span style="flex:none; width:96px; height:72px; border-radius:12px; overflow:hidden; background:#ddd1bf;"><sc-if value="{{ b.hasUrl }}"><span aria-hidden="true" style="display:block; width:100%; height:100%; object-fit:cover; background:url({{ b.url }}) center / cover no-repeat;"></span></sc-if></span>
+                  <span style="flex:1 1 150px; min-width:0; display:flex; flex-direction:column; gap:4px;"><span style="font:600 15px/1.3 Switzer, Helvetica, Arial, sans-serif; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ b.name }}</span><span style="font:400 13px/1.4 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">{{ b.meta }}</span></span>
+                  <span style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <label style="display:inline-flex; align-items:center; min-height:44px; padding:0 16px; border-radius:999px; border:1px solid rgba(41,28,14,.34); font:500 13.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Replace<input type="file" accept="image/jpeg,image/png,image/webp" onChange="{{ b.onFile }}" style="display:none;"></label>
+                    <button type="button" onClick="{{ b.onRemove }}" style="min-height:44px; padding:0 12px; border:0; background:none; color:#6E473B; font:500 13.5px/1 Switzer, Helvetica, Arial, sans-serif; text-decoration:underline; text-underline-offset:4px; cursor:pointer;">Remove</button>
+                  </span>
+                </div>
+                <sc-for list="{{ b.issues }}" as="t"><p style="display:flex; gap:10px; margin:0; padding:11px 14px; border-radius:14px; background:rgba(245,179,87,.28); font:500 13.5px/1.45 Switzer, Helvetica, Arial, sans-serif; color:#291C0E;">{{ t.t }}</p></sc-for>
+                <sc-if value="{{ b.showExtras }}">
+                  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px;">
+                    <sc-for list="{{ b.extras }}" as="e"><span style="position:relative; width:72px; height:54px; border-radius:10px; overflow:hidden; background:#ddd1bf;"><span aria-hidden="true" style="display:block; width:100%; height:100%; object-fit:cover; background:url({{ e.url }}) center / cover no-repeat;"></span><button type="button" onClick="{{ e.onRemove }}" aria-label="Remove this view" style="position:absolute; top:3px; right:3px; display:grid; place-items:center; width:22px; height:22px; padding:0; border:0; border-radius:50%; background:rgba(21,16,10,.75); color:#F4ECE0; font:600 12px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">×</button></span></sc-for>
+                    <label style="display:inline-flex; align-items:center; min-height:44px; padding:0 16px; border-radius:999px; border:1px dashed rgba(41,28,14,.4); font:500 13.5px/1 Switzer, Helvetica, Arial, sans-serif; color:#291C0E; cursor:pointer;">{{ b.extraLabel }}<input type="file" multiple accept="image/jpeg,image/png,image/webp" onChange="{{ b.onExtra }}" style="display:none;"></label>
+                  </div>
+                </sc-if>
+              </sc-if>
+              <sc-if value="{{ b.none }}">
+                <div onDragOver="{{ b.onDragOver }}" onDragLeave="{{ b.onDragLeave }}" onDrop="{{ b.onDrop }}" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:clamp(22px, 4vw, 34px) 16px; border:1.5px dashed {{ b.dropBd }}; border-radius:22px; background:{{ b.dropBg }}; transition:background .2s, border-color .2s;">
+                  <span style="display:grid; place-items:center; width:52px; height:52px; border-radius:50%; background:#291C0E; color:#F5B357;"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;"><path d="M4 8.5h3l1.6-2.5h6.8L17 8.5h3v10H4z"></path><circle cx="12" cy="13" r="3.4"></circle></svg></span>
+                  <span style="display:flex; flex-direction:column; gap:4px;"><span style="font:600 16px/1.3 Switzer, Helvetica, Arial, sans-serif;">{{ b.dropTitle }}</span><span style="font:400 13.5px/1.45 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">{{ b.dropSub }}</span></span>
+                  <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px;">
+                    <label style="display:inline-flex; align-items:center; min-height:48px; padding:0 20px; border-radius:999px; background:#291C0E; color:#F4ECE0; font:500 14.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Upload photo<input type="file" accept="image/jpeg,image/png,image/webp" onChange="{{ b.onFile }}" style="display:none;"></label>
+                    <sc-if value="{{ b.touch }}"><label style="display:inline-flex; align-items:center; min-height:48px; padding:0 18px; border-radius:999px; border:1px solid rgba(41,28,14,.34); font:500 14.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Take a photo<input type="file" accept="image/*" capture="environment" onChange="{{ b.onFile }}" style="display:none;"></label></sc-if>
+                    <button type="button" onClick="{{ b.onLinkOpen }}" style="min-height:48px; padding:0 18px; border-radius:999px; border:1px solid rgba(41,28,14,.34); background:transparent; color:#291C0E; font:500 14.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Paste a link</button>
+                    <sc-if value="{{ b.showSample }}"><button type="button" onClick="{{ b.onSample }}" style="min-height:48px; padding:0 18px; border-radius:999px; border:1px solid rgba(41,28,14,.34); background:transparent; color:#291C0E; font:500 14.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Try a sample building</button></sc-if>
+                  </div>
+                  <sc-if value="{{ b.linkOpen }}">
+                    <div style="display:flex; flex-wrap:wrap; gap:8px; width:100%; max-width:520px;">
+                      <input value="{{ b.linkVal }}" onChange="{{ b.onLinkVal }}" type="url" inputmode="url" placeholder="https://…" aria-label="Photo link" style="flex:1 1 220px; min-width:0; min-height:48px; padding:0 16px; border-radius:999px; border:1px solid rgba(41,28,14,.34); background:#fff; color:#291C0E; font:400 15px/1 Switzer, Helvetica, Arial, sans-serif; outline:none;">
+                      <button type="button" onClick="{{ b.onLinkGo }}" style="flex:none; min-height:48px; padding:0 20px; border:0; border-radius:999px; background:#291C0E; color:#F4ECE0; font:500 14.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Import</button>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ b.hasErr }}"><p style="margin:0; font:500 13.5px/1.45 Switzer, Helvetica, Arial, sans-serif; color:#8a2f1d;">{{ b.err }}</p></sc-if>
+                </div>
+              </sc-if>
+            </sc-if>
+
+            <sc-if value="{{ b.isCards }}">
+              <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, {{ b.min }}px), 1fr)); gap:{{ b.gapPx }}px;">
+                <sc-for list="{{ b.options }}" as="o">
+                  <div role="button" tabindex="0" aria-pressed="{{ o.on }}" onClick="{{ o.onClick }}" onKeyDown="{{ o.onKey }}" onMouseEnter="{{ o.onEnter }}" onMouseLeave="{{ o.onLeave }}" style="position:relative; display:flex; flex-direction:column; border-radius:18px; overflow:hidden; background:#EFE6D8; border:1.5px solid {{ o.bd }}; box-shadow:{{ o.sh }}; opacity:{{ o.op }}; cursor:pointer; transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s, border-color .2s;" style-hover="transform:translateY(-2px);">
+                    <div style="position:relative; aspect-ratio:{{ b.ratio }}; overflow:hidden; background:#ddd1bf;">
+                      <sc-if value="{{ o.hasImg }}"><span aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:tcFade .4s ease both; background:url({{ o.img }}) center / cover no-repeat;"></span></sc-if>
+                      <sc-if value="{{ o.isPh }}"><span style="position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-start; gap:6px; padding:9px; background:repeating-linear-gradient(135deg,#e6dccd 0 9px,#ddd1bf 9px 18px);"><sc-if value="{{ o.hasPh }}"><span style="max-width:100%; padding:3px 6px; border-radius:6px; background:rgba(249,244,234,.92); font:500 10px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; color:#6E473B; overflow-wrap:anywhere;">{{ o.ph }}</span></sc-if><sc-if value="{{ o.canCopy }}"><button type="button" onClick="{{ o.onCopy }}" style="min-height:30px; padding:0 10px; border:0; border-radius:999px; background:#291C0E; color:#F4ECE0; font:500 11px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">Copy ChatGPT prompt</button></sc-if></span></sc-if>
+                      <sc-if value="{{ o.hasTag }}"><span style="position:absolute; left:9px; top:9px; padding:5px 9px; border-radius:999px; background:#F5B357; color:#1F150A; font:600 11px/1 Switzer, Helvetica, Arial, sans-serif;">{{ o.tag }}</span></sc-if>
+                      <span style="position:absolute; top:9px; right:9px; display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:#291C0E; color:#F5B357; opacity:{{ o.ck }}; transform:scale({{ o.cks }}); transition:opacity .2s, transform .3s cubic-bezier(.2,.8,.2,1.4);"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round;"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:3px; padding:10px 12px 12px;">
+                      <span style="font:600 14.5px/1.25 Switzer, Helvetica, Arial, sans-serif;">{{ o.label }}</span>
+                      <sc-if value="{{ o.hasSub }}"><span style="font:400 12.5px/1.4 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">{{ o.sub }}</span></sc-if>
+                    </div>
+                    <sc-if value="{{ o.showSubs }}">
+                      <div style="display:flex; flex-wrap:wrap; gap:6px; padding:0 10px 12px;">
+                        <sc-for list="{{ o.subs }}" as="t"><button type="button" aria-pressed="{{ t.on }}" onClick="{{ t.onClick }}" style="min-height:36px; padding:0 12px; border-radius:999px; border:1px solid {{ t.bd }}; background:{{ t.bg }}; color:{{ t.ink }}; font:500 12.5px/1.1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">{{ t.label }}</button></sc-for>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isChips }}">
+              <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                <sc-for list="{{ b.options }}" as="o">
+                  <button type="button" aria-pressed="{{ o.on }}" onClick="{{ o.onClick }}" style="display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:0 16px; border-radius:999px; border:1px solid {{ o.bd }}; background:{{ o.bg }}; color:{{ o.ink }}; font:500 14px/1.2 Switzer, Helvetica, Arial, sans-serif; text-align:left; cursor:pointer; transition:background .2s, color .2s, border-color .2s;" style-active="transform:scale(.97);"><sc-if value="{{ o.hasDot }}"><span style="flex:none; width:20px; height:20px; margin-left:-6px; border-radius:50%; background:{{ o.dot }}; box-shadow:inset 0 0 0 1px rgba(0,0,0,.18), inset -3px -4px 6px rgba(0,0,0,.16);"></span></sc-if><sc-if value="{{ o.hasX }}"><svg viewBox="0 0 24 24" aria-hidden="true" style="flex:none; width:15px; height:15px; margin-left:-4px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round;"><path d="M6 6l12 12M18 6 6 18"></path></svg></sc-if>{{ o.label }}</button>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isSeg }}">
+              <div role="radiogroup" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, {{ b.min }}px), 1fr)); gap:8px;">
+                <sc-for list="{{ b.options }}" as="o">
+                  <button type="button" role="radio" aria-checked="{{ o.on }}" onClick="{{ o.onClick }}" style="display:flex; flex-direction:column; justify-content:center; gap:3px; min-height:58px; padding:10px 14px; border-radius:14px; border:1.5px solid {{ o.bd }}; background:{{ o.bg }}; color:{{ o.ink }}; text-align:left; cursor:pointer; transition:background .2s, color .2s, border-color .2s;">
+                    <span style="font:600 14.5px/1.25 Switzer, Helvetica, Arial, sans-serif;">{{ o.label }}</span>
+                    <sc-if value="{{ o.hasSub }}"><span style="font:400 12.5px/1.35 Switzer, Helvetica, Arial, sans-serif; color:{{ o.subInk }};">{{ o.sub }}</span></sc-if>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isStepper }}">
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px 18px;">
+                <div style="display:flex; align-items:center; gap:4px; padding:5px; border-radius:999px; background:#291C0E; color:#F4ECE0;">
+                  <button type="button" onClick="{{ b.onMinus }}" aria-label="One floor less" style="display:grid; place-items:center; width:48px; height:48px; border:0; border-radius:50%; background:rgba(244,236,224,.12); color:inherit; cursor:pointer;"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round;"><path d="M5 12h14"></path></svg></button>
+                  <input value="{{ b.value }}" onChange="{{ b.onInput }}" inputmode="numeric" aria-label="Floors including ground" style="width:64px; text-align:center; background:transparent; border:0; color:#F4ECE0; font:300 34px/1 Zodiak, Georgia, serif; outline:none;">
+                  <button type="button" onClick="{{ b.onPlus }}" aria-label="One floor more" style="display:grid; place-items:center; width:48px; height:48px; border:0; border-radius:50%; background:#F5B357; color:#1F150A; cursor:pointer;"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round;"><path d="M12 5v14M5 12h14"></path></svg></button>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:3px;"><span style="font:600 16px/1.3 Switzer, Helvetica, Arial, sans-serif;">{{ b.readout }}</span><span style="font:400 13.5px/1.4 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">{{ b.readout2 }}</span></div>
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                <sc-for list="{{ b.quick }}" as="o"><button type="button" onClick="{{ o.onClick }}" style="min-width:52px; min-height:40px; padding:0 12px; border-radius:999px; border:1px solid {{ o.bd }}; background:{{ o.bg }}; color:{{ o.ink }}; font:500 13.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">{{ o.label }}</button></sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isFloors }}">
+              <div style="display:flex; flex-direction:column; gap:10px; padding:14px; border-radius:18px; background:rgba(255,255,255,.4); border:1px solid rgba(41,28,14,.16);">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:4px 12px;"><span style="font:600 14px/1.35 Switzer, Helvetica, Arial, sans-serif;">{{ b.floorsLabel }}</span><span style="display:flex; gap:2px;"><button type="button" onClick="{{ b.onAll }}" style="min-height:40px; padding:0 10px; border:0; background:none; color:#291C0E; font:500 13px/1 Switzer, Helvetica, Arial, sans-serif; text-decoration:underline; text-underline-offset:3px; cursor:pointer;">Select all</button><button type="button" onClick="{{ b.onClear }}" style="min-height:40px; padding:0 10px; border:0; background:none; color:#291C0E; font:500 13px/1 Switzer, Helvetica, Arial, sans-serif; text-decoration:underline; text-underline-offset:3px; cursor:pointer;">Clear</button></span></div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(50px, 1fr)); gap:6px;">
+                  <sc-for list="{{ b.chips }}" as="o"><button type="button" aria-pressed="{{ o.on }}" onClick="{{ o.onClick }}" style="min-height:44px; padding:0 4px; border-radius:12px; border:1px solid {{ o.bd }}; background:{{ o.bg }}; color:{{ o.ink }}; font:600 14px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">{{ o.label }}</button></sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isToggle }}">
+              <button type="button" role="switch" aria-checked="{{ b.on }}" onClick="{{ b.onClick }}" style="display:flex; align-items:center; gap:14px; width:100%; min-height:64px; padding:12px 16px; border-radius:16px; border:1px solid rgba(41,28,14,.16); background:rgba(255,255,255,.42); color:#291C0E; text-align:left; cursor:pointer;">
+                <span style="flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:3px;"><span style="font:600 15px/1.3 Switzer, Helvetica, Arial, sans-serif;">{{ b.label }}</span><sc-if value="{{ b.hasSub }}"><span style="font:400 13px/1.45 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">{{ b.sub }}</span></sc-if></span>
+                <span style="flex:none; position:relative; width:50px; height:30px; border-radius:999px; background:{{ b.track }}; transition:background .2s;"><span style="position:absolute; top:3px; left:{{ b.knob }}px; width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,.25); transition:left .2s;"></span></span>
+              </button>
+            </sc-if>
+
+            <sc-if value="{{ b.isText }}">
+              <textarea value="{{ b.value }}" onChange="{{ b.onChange }}" placeholder="{{ b.ph }}" rows="3" aria-label="{{ b.aria }}" style="width:100%; padding:14px 16px; border-radius:16px; border:1px solid rgba(41,28,14,.34); background:rgba(255,255,255,.55); color:#291C0E; font:400 15px/1.5 Switzer, Helvetica, Arial, sans-serif; resize:vertical; outline:none;"></textarea>
+            </sc-if>
+
+            <sc-if value="{{ b.isFields }}">
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap:10px;">
+                <sc-for list="{{ b.fields }}" as="f">
+                  <label style="display:flex; flex-direction:column; gap:6px; min-width:0;"><span style="font:500 13px/1.3 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">{{ f.label }}</span><input value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.ph }}" inputmode="{{ f.mode }}" type="{{ f.type }}" style="width:100%; min-height:48px; padding:0 14px; border-radius:12px; border:1px solid rgba(41,28,14,.34); background:rgba(255,255,255,.6); color:#291C0E; font:500 15px/1 Switzer, Helvetica, Arial, sans-serif; outline:none;"></label>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isSlider }}">
+              <div style="display:flex; flex-direction:column; gap:12px; padding:18px; border-radius:20px; background:#291C0E; color:#F4ECE0; opacity:{{ b.op }}; transition:opacity .2s;">
+                <div style="display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:4px 14px;"><span style="font:300 28px/1.1 Zodiak, Georgia, serif;">{{ b.readout }}</span><span style="font:500 13px/1.35 Switzer, Helvetica, Arial, sans-serif; color:rgba(244,236,224,.72);">{{ b.readout2 }}</span></div>
+                <input type="range" min="0" max="100" step="1" value="{{ b.value }}" onChange="{{ b.onChange }}" aria-label="Budget comfort level" style="width:100%; height:28px; margin:0; accent-color:#F5B357; cursor:pointer;">
+                <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:4px;">
+                  <sc-for list="{{ b.marks }}" as="m"><button type="button" onClick="{{ m.onClick }}" style="min-height:40px; padding:0 2px; border:0; background:none; color:{{ m.ink }}; font:500 12px/1.25 Switzer, Helvetica, Arial, sans-serif; text-align:{{ m.align }}; cursor:pointer;">{{ m.label }}</button></sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isPalettes }}">
+              <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap:10px;">
+                <sc-for list="{{ b.options }}" as="o">
+                  <button type="button" aria-pressed="{{ o.on }}" onClick="{{ o.onClick }}" style="display:flex; flex-direction:column; gap:10px; padding:9px 9px 12px; border-radius:16px; border:1.5px solid {{ o.bd }}; background:{{ o.bg }}; color:{{ o.ink }}; text-align:left; cursor:pointer;">
+                    <span style="display:flex; height:48px; border-radius:10px; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);"><span style="flex:3 1 0; background:{{ o.c1 }};"></span><span style="flex:1.3 1 0; background:{{ o.c2 }};"></span></span>
+                    <span style="display:flex; flex-direction:column; gap:2px; padding:0 3px;"><span style="font:600 14px/1.25 Switzer, Helvetica, Arial, sans-serif;">{{ o.label }}</span><span style="font:400 12px/1.3 Switzer, Helvetica, Arial, sans-serif; color:{{ o.subInk }};">{{ o.sub }}</span></span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isSlots }}">
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap:8px;">
+                <sc-for list="{{ b.slots }}" as="o">
+                  <button type="button" aria-pressed="{{ o.on }}" onClick="{{ o.onClick }}" style="display:flex; align-items:center; gap:10px; min-height:62px; padding:8px 12px 8px 8px; border-radius:14px; border:1.5px solid {{ o.bd }}; background:{{ o.bg }}; color:#291C0E; text-align:left; cursor:pointer;">
+                    <span style="flex:none; width:44px; height:44px; border-radius:10px; background:{{ o.hex }}; box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);"></span>
+                    <span style="display:flex; flex-direction:column; gap:3px; min-width:0;"><span style="font:600 13.5px/1.2 Switzer, Helvetica, Arial, sans-serif;">{{ o.label }}</span><span style="font:500 11.5px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; color:#6E473B; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ o.name }}</span></span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isMatrix }}">
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <sc-for list="{{ b.rows }}" as="r">
+                  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; padding:10px 12px; border-radius:14px; background:rgba(255,255,255,.42); border:1px solid rgba(41,28,14,.12);">
+                    <span style="flex:1 1 130px; font:600 14px/1.3 Switzer, Helvetica, Arial, sans-serif;">{{ r.label }}</span>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                      <sc-for list="{{ r.cells }}" as="c"><button type="button" aria-pressed="{{ c.on }}" onClick="{{ c.onClick }}" style="display:inline-flex; align-items:center; gap:7px; min-height:40px; padding:0 12px; border-radius:999px; border:1px solid {{ c.bd }}; background:{{ c.bg }}; color:{{ c.ink }}; font:500 13px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;"><span style="width:12px; height:12px; border-radius:50%; background:{{ c.hex }}; box-shadow:inset 0 0 0 1px rgba(0,0,0,.2);"></span>{{ c.label }}</button></sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+                <button type="button" onClick="{{ b.onAuto }}" style="align-self:flex-start; display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:0 16px; border-radius:999px; border:1px solid rgba(41,28,14,.34); background:transparent; color:#291C0E; font:500 13.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;"><path d="M12 3.5c.5 4.3 2.2 6 6.5 6.5-4.3.5-6 2.2-6.5 6.5-.5-4.3-2.2-6-6.5-6.5 4.3-.5 6-2.2 6.5-6.5z"></path></svg>Auto-balance</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isProducts }}">
+              <div style="display:grid; grid-auto-flow:column; grid-auto-columns:150px; gap:10px; overflow-x:auto; padding-bottom:6px; scroll-snap-type:x mandatory;">
+                <sc-for list="{{ b.options }}" as="o">
+                  <button type="button" aria-pressed="{{ o.on }}" onClick="{{ o.onClick }}" style="display:flex; flex-direction:column; padding:0; border-radius:14px; overflow:hidden; border:1.5px solid {{ o.bd }}; background:#EFE6D8; color:#291C0E; text-align:left; cursor:pointer; scroll-snap-align:start;">
+                    <span style="position:relative; display:block; height:84px; background:{{ o.hex }};"><sc-if value="{{ o.hasImg }}"><span aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:url({{ o.img }}) center / cover no-repeat;"></span></sc-if></span>
+                    <span style="display:flex; flex-direction:column; gap:2px; padding:8px 10px 10px;"><span style="font:600 13px/1.25 Switzer, Helvetica, Arial, sans-serif;">{{ o.name }}</span><span style="font:500 10.5px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; color:#6E473B;">{{ o.code }}</span><span style="font:400 11.5px/1.3 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">{{ o.type }}</span></span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isExtract }}">
+              <div style="display:flex; flex-direction:column; gap:14px; padding:16px 18px; border-radius:20px; background:#291C0E; color:#F4ECE0;">
+                <div style="display:flex; align-items:center; gap:10px;"><sc-if value="{{ b.reading }}"><span style="flex:none; width:18px; height:18px; border-radius:50%; border:2px solid rgba(245,179,87,.3); border-top-color:#F5B357; animation:tcSpin .8s linear infinite;"></span></sc-if><sc-if value="{{ b.ready }}"><svg viewBox="0 0 24 24" aria-hidden="true" style="flex:none; width:18px; height:18px; fill:none; stroke:#F5B357; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;"><path d="M12 3.5c.5 4.3 2.2 6 6.5 6.5-4.3.5-6 2.2-6.5 6.5-.5-4.3-2.2-6-6.5-6.5 4.3-.5 6-2.2 6.5-6.5z"></path></svg></sc-if><span style="font:600 14px/1.3 Switzer, Helvetica, Arial, sans-serif;">{{ b.head }}</span></div>
+                <sc-if value="{{ b.ready }}">
+                  <div style="display:flex; flex-wrap:wrap; gap:6px;"><sc-for list="{{ b.pal }}" as="c"><span title="{{ c.hex }}" style="width:38px; height:38px; border-radius:10px; background:{{ c.hex }}; box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);"></span></sc-for></div>
+                  <div style="display:flex; flex-direction:column;">
+                    <sc-for list="{{ b.rows }}" as="r"><div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:2px 14px; padding:8px 0; border-top:1px solid rgba(244,236,224,.12);"><span style="font:400 12.5px/1.4 Switzer, Helvetica, Arial, sans-serif; color:rgba(244,236,224,.62);">{{ r.k }}</span><span style="font:500 13.5px/1.4 Switzer, Helvetica, Arial, sans-serif; text-align:right;">{{ r.v }}</span></div></sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isNote }}">
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <sc-for list="{{ b.notes }}" as="n"><p style="display:flex; align-items:flex-start; gap:10px; margin:0; padding:11px 14px; border-radius:14px; background:rgba(110,71,59,.1); font:500 13.5px/1.5 Switzer, Helvetica, Arial, sans-serif; color:#4e3329;"><svg viewBox="0 0 24 24" aria-hidden="true" style="flex:none; width:16px; height:16px; margin-top:2px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>{{ n.t }}</p></sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isReview }}">
+              <div style="display:flex; flex-direction:column; border-radius:18px; overflow:hidden; border:1px solid rgba(41,28,14,.16); background:rgba(255,255,255,.42);">
+                <sc-for list="{{ b.rows }}" as="r">
+                  <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 14px; padding:12px 16px; border-bottom:1px solid rgba(41,28,14,.1);">
+                    <span style="flex:0 1 170px; font:500 12.5px/1.4 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">{{ r.label }}</span>
+                    <span style="flex:1 1 220px; min-width:0; font:500 14.5px/1.45 Switzer, Helvetica, Arial, sans-serif;">{{ r.value }}</span>
+                    <button type="button" onClick="{{ r.onEdit }}" style="min-height:36px; padding:0 4px; border:0; background:none; color:#291C0E; font:600 13px/1 Switzer, Helvetica, Arial, sans-serif; text-decoration:underline; text-underline-offset:3px; cursor:pointer;">Edit</button>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ b.isAction }}">
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
+                <sc-if value="{{ b.isFile }}"><label style="display:inline-flex; align-items:center; gap:10px; min-height:48px; padding:0 18px; border-radius:999px; border:1px solid rgba(41,28,14,.34); background:rgba(255,255,255,.4); color:#291C0E; font:500 14px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">{{ b.label }}<input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" onChange="{{ b.onFile }}" style="display:none;"></label></sc-if>
+                <sc-if value="{{ b.isBtn }}"><button type="button" onClick="{{ b.onClick }}" style="display:inline-flex; align-items:center; min-height:50px; padding:0 22px; border:0; border-radius:999px; background:{{ b.bg }}; color:{{ b.ink }}; font:500 14.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">{{ b.label }}</button></sc-if>
+                <sc-if value="{{ b.hasNote }}"><span style="font:400 13px/1.4 Switzer, Helvetica, Arial, sans-serif; color:#6E473B;">{{ b.note }}</span></sc-if>
+              </div>
+            </sc-if>
+          </section>
+        </sc-for>
+
+        <sc-if value="{{ showNav }}">
+          <div style="position:{{ L.navPos }}; bottom:0; left:0; right:0; z-index:30; display:flex; flex-direction:column; gap:8px; margin-top:22px; padding:{{ L.navPad }}; background:{{ L.navBg }}; border-top:{{ L.navBt }}; backdrop-filter:{{ L.navBlur }};">
+            <sc-if value="{{ nav.hasMsg }}"><p style="margin:0; font:500 13px/1.35 Switzer, Helvetica, Arial, sans-serif; color:#6E473B; text-align:{{ L.navAlign }};">{{ nav.msg }}</p></sc-if>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <button type="button" onClick="{{ nav.onBack }}" style="flex:none; min-height:54px; padding:0 20px; border:1px solid rgba(41,28,14,.34); border-radius:999px; background:transparent; color:#291C0E; font:500 15px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer;">{{ nav.backLabel }}</button>
+              <button type="button" onClick="{{ nav.onNext }}" aria-disabled="{{ nav.disabled }}" style="flex:{{ L.nextFlex }}; display:inline-flex; align-items:center; justify-content:space-between; gap:14px; min-height:54px; padding:4px 5px 4px 24px; border:0; border-radius:999px; background:#291C0E; color:#F4ECE0; font:500 15.5px/1 Switzer, Helvetica, Arial, sans-serif; cursor:pointer; opacity:{{ nav.op }}; box-shadow:0 18px 34px -20px rgba(41,28,14,.8); transition:opacity .2s;">{{ nav.nextLabel }}<span style="display:grid; place-items:center; width:44px; height:44px; border-radius:50%; background:#F5B357; color:#1F150A;"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></button>
+            </div>
+          </div>
+        </sc-if>
+      </main>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position:fixed; z-index:80; left:50%; bottom:{{ L.toastB }}px; transform:translateX(-50%); width:max-content; max-width:calc(100vw - 32px); padding:12px 18px; border-radius:16px; background:#1F150A; color:#F4ECE0; font:500 13.5px/1.45 Switzer, Helvetica, Arial, sans-serif; box-shadow:0 18px 40px -16px rgba(0,0,0,.7); animation:tcRise .3s ease both;">{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showIds&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Review aids&quot;},&quot;promptHelpers&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Review aids&quot;},&quot;units&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;sq ft&quot;,&quot;m²&quot;],&quot;default&quot;:&quot;sq ft&quot;,&quot;tsType&quot;:&quot;'sq ft' | 'm²'&quot;,&quot;section&quot;:&quot;Estimate&quot;}}">
+const INK = '#291C0E', INK2 = '#6E473B', LINE = 'rgba(41,28,14,.14)', LINE2 = 'rgba(41,28,14,.34)', AMB = '#F5B357', CR = '#F4ECE0';
+const KEY = 'terucon.facade.v3';
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const stop = e => { if (e && e.stopPropagation) e.stopPropagation(); };
+const keyAct = fn => e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); } };
+const uniq = a => Array.from(new Set(a));
+const noop = () => {};
+const TYPES = [
+  { k: 'residential', l: 'Home', l3: 'Residential', sub: 'House, villa, apartments', subs: ['Independent house', 'Villa', 'Apartment building', 'Residential complex'], fl: 3 },
+  { k: 'retail', l: 'Shop / showroom', l3: 'Retail', sub: 'Showroom, store, supermarket', subs: ['Showroom', 'Supermarket', 'Retail outlet', 'Standalone store'], fl: 2 },
+  { k: 'corporate', l: 'Office', l3: 'Corporate', sub: 'Office, IT park, headquarters', subs: ['Office building', 'IT park', 'Corporate headquarters'], fl: 7 },
+  { k: 'hospitality', l: 'Hotel', l3: 'Hospitality', sub: 'Hotel, resort, restaurant', subs: ['Hotel', 'Resort', 'Restaurant'], fl: 6 },
+  { k: 'commercial', l: 'Commercial', l3: 'Commercial', sub: 'Complex, mall, business centre', subs: ['Commercial complex', 'Shopping mall', 'Business centre'], fl: 4 },
+  { k: 'institutional', l: 'Institutional', l3: 'Institutional', sub: 'School, college, hospital', subs: ['School', 'College', 'Hospital'], fl: 4 },
+  { k: 'industrial', l: 'Industrial', l3: 'Industrial', sub: 'Factory, warehouse', subs: ['Factory', 'Warehouse', 'Industrial facility'], fl: 1 },
+  { k: 'other', l: 'Other', l3: 'Other', sub: 'Something else', subs: ['Mixed-use', 'Religious / community', 'Custom'], fl: 4 }];
+const TYPE = k => TYPES.find(t => t.k === k);
+const SYS = {
+  glass: { l: 'Glass', s: 'Curtain wall, structural, spider', hex: '#525a5f', subs: [['curtain', 'Curtain wall', 'system-glass'], ['structural', 'Structural', 'sub-glass-structural'], ['semi', 'Semi-structural', 'sub-glass-semi'], ['spider', 'Spider', 'sub-glass-spider']] },
+  acp: { l: 'ACP', s: 'Aluminium composite panels', hex: '#bab5ad', subs: [] },
+  aluminium: { l: 'Aluminium', s: 'Fins, louvers, cladding', hex: '#3d3f42', subs: [['fins', 'Fins', 'system-aluminium'], ['louvers', 'Louvers', 'sub-aluminium-louvers'], ['cladding', 'Cladding', 'sub-aluminium-cladding']] },
+  metal: { l: 'Metal', s: 'Solid, perforated, expanded', hex: '#9a8162', subs: [['perforated', 'Perforated', 'system-metal'], ['solid', 'Solid', 'sub-metal-solid'], ['expanded', 'Expanded', 'sub-metal-expanded']] },
+  stone: { l: 'Stone', s: 'Granite, marble, sandstone, engineered', hex: '#c8b68f', subs: [['sandstone', 'Sandstone', 'system-stone'], ['granite', 'Granite', 'sub-stone-granite'], ['marble', 'Marble', 'sub-stone-marble'], ['engineered', 'Engineered', 'sub-stone-engineered']] },
+  pustone: { l: 'PU stone', s: 'Lightweight stone panels', hex: '#8a8278', subs: [] },
+  hpl: { l: 'HPL', s: 'Exterior-grade laminate', hex: '#6e5a48', subs: [] },
+  grc: { l: 'GRC / GFRC', s: 'Jaali, fluted, architectural', hex: '#e3ddd1', subs: [] },
+  terracotta: { l: 'Terracotta', s: 'Panels and baguettes', hex: '#b5653d', subs: [['baguettes', 'Baguettes', 'system-terracotta'], ['panels', 'Panels', 'sub-terracotta-panels']] },
+  wood: { l: 'Wood-look', s: 'Wood-finish battens and panels', hex: '#a9744a', subs: [] }};
+const SYS_KEYS = Object.keys(SYS);
+const BASE_METAL = [['al', 'Aluminium'], ['steel', 'Steel'], ['ss', 'Stainless steel']];
+const SUB3D = { semi: 'structural', sandstone: 'natural', solid: 'screen' };
+const LOOKS = [
+  { k: 'glass', l: 'Sleek glass', s: 'Clean, reflective glazing', sys: 'glass', img: 'system-glass' },
+  { k: 'wood', l: 'Warm wood-look', s: 'The feel of timber, no upkeep', sys: 'wood', img: 'system-wood' },
+  { k: 'stone', l: 'Natural stone', s: 'Sandstone, granite or marble', sys: 'stone', img: 'system-stone' },
+  { k: 'panels', l: 'Smooth modern panels', s: 'Flat ACP or HPL panels', sys: 'acp', img: 'system-acp' },
+  { k: 'fins', l: 'Vertical fins & louvers', s: 'Rhythm, depth and shade', sys: 'aluminium', img: 'system-aluminium' },
+  { k: 'terracotta', l: 'Earthy terracotta', s: 'Warm baked-clay tones', sys: 'terracotta', img: 'system-terracotta' },
+  { k: 'screens', l: 'Designer perforated screens', s: 'Patterned metal and jaali', sys: 'metal', img: 'system-metal' }];
+const LOOK_OF = { glass: 'glass', wood: 'wood', stone: 'stone', pustone: 'stone', acp: 'panels', hpl: 'panels', aluminium: 'fins', terracotta: 'terracotta', metal: 'screens', grc: 'screens' };
+const INSPO = [
+  { k: 'glass-fins', img: 'inspo-glass-fins', l: 'Glass with bronze fins', style: 'Modern corporate', sys: [['glass', 'curtain'], ['aluminium', 'fins']], pal: ['#525a5f', '#5b4636', '#d9d0c3'], finish: 'Metallic', pattern: 'Linear fins', light: 'Daylight' },
+  { k: 'wood-stone', img: 'inspo-wood-stone', l: 'Wood battens & sandstone', style: 'Warm contemporary', sys: [['wood', ''], ['stone', 'sandstone']], pal: ['#f1efea', '#a9744a', '#c8b68f'], finish: 'Wood grain', pattern: 'Vertical lines', light: 'Warm evening uplighting' },
+  { k: 'terracotta', img: 'inspo-terracotta', l: 'Terracotta baguettes', style: 'Earthy institutional', sys: [['terracotta', 'baguettes'], ['glass', 'curtain']], pal: ['#b5653d', '#e3ddd1', '#6e5642'], finish: 'Matte', pattern: 'Horizontal lines', light: 'Daylight' },
+  { k: 'showroom', img: 'reference-showroom', l: 'Champagne ACP showroom', style: 'Premium retail', sys: [['acp', ''], ['glass', 'structural'], ['aluminium', 'fins']], pal: ['#c9b48d', '#5b4636', '#2b2c2e'], finish: 'Satin', pattern: 'Clean flat', light: 'Daylight' }];
+const TRANSFER = [['vibe', 'The overall architectural vibe'], ['materials', 'The materials & textures'], ['palette', 'The colour palette'], ['framing', 'The fins, louvers & framing'], ['lighting', 'The warm night lighting']];
+const AVOID1 = [['lighter', 'Make it lighter / less dark'], ['lessglass', 'Use less glass / less mirror shine'], ['cleaner', 'Keep it cleaner & less busy'], ['toned', 'Tone down bold / flashy colours']];
+const AVOID2 = [['mirror', 'Too much mirror glass'], ['gloomy', 'Dark & gloomy'], ['loud', 'Loud colours'], ['busy', 'Busy patterns'], ['commercial', 'Overly commercial look']];
+const AVOID3 = [['nomirror', 'No mirror glazing'], ['nodark', 'Avoid dark massing'], ['nojoints', 'No cluttered joints'], ['restrained', 'Keep proportions restrained']];
+const REMOVE = [['wires', 'Overhead wires & poles'], ['vehicles', 'Parked vehicles'], ['trees', 'Blocking trees'], ['hoardings', 'Old hoardings'], ['people', 'People']];
+const ZONES = [['entrance', 'Entrance'], ['columns', 'Columns & pillars'], ['balcony', 'Balcony fronts'], ['parapet', 'Parapet / top edge'], ['brush', 'Paint it on my photo']];
+const ZONES3 = [['entire', 'Entire'], ['front', 'Front'], ['side', 'Side'], ['rear', 'Rear'], ['ground', 'Ground'], ['upper', 'Upper'], ['balcony', 'Balcony fronts'], ['columns', 'Columns'], ['entrance', 'Entrance'], ['parapet', 'Parapet'], ['brush', 'Brush / box mask']];
+const TREAT = [['replace', 'Complete fresh facade', 'Replace the old exterior look', 'treat-full', 'Full replacement'], ['overclad', 'Modern cladding over existing wall', 'Keep the base, wrap it in a new finish', 'treat-overclad', 'Over-cladding'], ['accent', 'Subtle accent upgrade', 'Highlight key areas cleanly', 'treat-accent', 'Accent']];
+const TONE = [['light', 'Light & airy', 'tone-light', 'Light'], ['warm', 'Warm & balanced', 'tone-warm', 'Balanced'], ['bold', 'Bold & dark', 'tone-bold', 'Dark']];
+const GLASS = [['min', 'Minimal glass', 'glass-min', 'Mostly solid walls'], ['balanced', 'Balanced', 'glass-balanced', 'Glass and solid together'], ['max', 'Maximum glass', 'glass-max', 'Bright and open']];
+const CONTRAST = [['blend', 'Seamless blend', 'Glass and wall read as one'], ['contrast', 'Crisp contrast', 'Glass stands out from the wall']];
+const FINISH = [['matte', 'Matte'], ['satin', 'Satin'], ['metallic', 'Metallic'], ['brushed', 'Brushed'], ['wood', 'Wood grain'], ['stone', 'Stone']];
+const PATTERN = [['flat', 'Clean flat'], ['vertical', 'Vertical lines'], ['horizontal', 'Horizontal lines'], ['fins', 'Linear fins'], ['geometric', 'Geometric']];
+const LIGHT2 = [['day', 'Daylight only', 'light-day'], ['uplight', 'Warm facade uplighting', 'light-uplight'], ['linear', 'Sleek linear LED strips', 'light-linear']];
+const LIGHT3 = [['day', 'None', 'Daylight only'], ['uplight', 'Uplighting', 'Washes walls and columns'], ['linear', 'Linear integrated LED', 'Lines at slabs and parapet']];
+const RENDER = [['day', 'Daylight'], ['dusk', 'Warm evening with lights'], ['both', 'Both']];
+const SIGN_T = [['board', 'Name board', 'Letters on a dark panel', 'sign-board'], ['logo', 'Logo panel', 'Your emblem on a panel', 'sign-logo'], ['letters', '3D letters', 'Raised letters on the wall', 'sign-letters']];
+const SIGN_POS = [['entrance', 'Above the entrance', 'Compact, at eye level'], ['front', 'Along the ground floor', 'Wide, for shop fronts'], ['top', 'On top of the building', 'Seen from far away']];
+const SIGN_FIN = [['white', 'White', '#f4f1ea'], ['black', 'Black', '#1d1b19'], ['steel', 'Brushed steel', '#c4c2bd'], ['gold', 'Gold', '#c9a45c'], ['bronze', 'Bronze', '#7a5a3a'], ['brand', 'My accent colour', '']];
+const SIGN_SCALE = [['subtle', 'Subtle', '300 mm letters'], ['medium', 'Medium', '600 mm letters'], ['bold', 'Bold', '900 mm letters']];
+const SIGN_LIGHT = [['none', 'Unlit'], ['front', 'Front-lit'], ['halo', 'Halo-lit']];
+const SIGN_H = [['300', '300 mm'], ['450', '450 mm'], ['600', '600 mm'], ['900', '900 mm']];
+const PALETTES = [
+  { k: 'warm-minimal', l: 'Warm minimal', s: 'Off-white with teak', c: ['#E2DBCD', '#A9744A'] },
+  { k: 'charcoal', l: 'Charcoal & champagne', s: 'Deep grey, soft gold', c: ['#3E3C3D', '#C9B48D'] },
+  { k: 'sandstone', l: 'Sandstone calm', s: 'Beige stone, bronze', c: ['#C8B68F', '#7A5A3A'] },
+  { k: 'urban', l: 'Urban grey', s: 'Dove grey, graphite', c: ['#9A9B9A', '#2B2C2E'] },
+  { k: 'earth', l: 'Terracotta earth', s: 'Baked red, ivory', c: ['#B5653D', '#EBE2D0'] },
+  { k: 'mono', l: 'Monochrome', s: 'Pure white, jet black', c: ['#F1EFEA', '#151515'] },
+  { k: 'sage', l: 'Sage & oak', s: 'Soft green, light oak', c: ['#8A9A84', '#D8BD95'] }];
+const SHADES = [['Pure white', '#F1EFEA'], ['Naxian White', '#D7D1C7', 'TIPL-SB826'], ['Ivory', '#EBE2D0'], ['Williams Grey', '#BAB5AD', 'TIPL-SB825'], ['Dove grey', '#9A9B9A'], ['Slate', '#5F6366'], ['Gun Metal', '#3E3C3D', 'TIPL-SB2006'], ['Graphite', '#2B2C2E'], ['Jet black', '#151515'], ['Chester Oak', '#D8BD95', 'TIPL-SB922'], ['Natural Walnut', '#937353', 'TIPL-SB912'], ['American Walnut', '#833918', 'TIPL-SB910'], ['Champagne', '#C9B48D'], ['Fiery Copper', '#D29674', 'TIPL-SB3001'], ['Bronze', '#7A5A3A'], ['Cortern Brown', '#8A3E1C', 'TIPL-CMT6002'], ['Silver', '#C4C6C8'], ['Steel blue', '#4A6A86'], ['Teal', '#3F6F6A'], ['Sage', '#8A9A84'], ['Terracotta', '#B5653D']];
+const RAL = { '1013': '#E3D9C6', '1015': '#E6D2B5', '3009': '#6D342D', '5011': '#1A2B3C', '6005': '#0F4336', '7016': '#383E42', '7022': '#4B4D46', '7035': '#CBD0CC', '7039': '#6B665E', '8014': '#4A3526', '8017': '#45322E', '9005': '#0E0E10', '9006': '#A1A1A0', '9007': '#878581', '9010': '#F1ECE1', '9016': '#F1F0EA' };
+const VIS = {
+  glass: [{ k: 'colour', l: 'Glass tint', o: [['clear', 'Clear', '#cfdde1'], ['blue', 'Blue', '#456f92'], ['grey', 'Grey', '#525a5f'], ['bronze', 'Bronze', '#6e5642'], ['green', 'Green', '#4f7c69']] }, { k: 'appearance', l: 'Reflectivity', o: [['clear', 'Low · see-through'], ['tinted', 'Medium · tinted'], ['reflective', 'High · mirror']] }],
+  acp: [{ k: 'finish', l: 'Panel look', o: [['solid', 'Solid'], ['metallic', 'Metallic'], ['wooden', 'Wood'], ['stone', 'Stone'], ['brushed', 'Brushed']] }, { k: 'groove', l: 'Cassette joint', o: [['flush', 'Flush 6 mm joint'], ['10', '10 mm shadow groove'], ['20', 'Deep 20 mm groove']] }],
+  aluminium: [{ k: 'depth', l: 'Fin depth', o: [['150', '150 mm'], ['300', '300 mm'], ['450', '450 mm']] }, { k: 'spacing', l: 'Fin spacing', o: [['450', '450 mm'], ['600', '600 mm'], ['900', '900 mm']] }, { k: 'finish', l: 'Finish', o: [['powder', 'Powder-coated'], ['anodized', 'Anodised'], ['wood', 'Wood finish']] }],
+  metal: [{ k: 'pattern', l: 'Perforation style', o: [['round', 'Round holes'], ['linear', 'Linear slots'], ['geometric', 'Geometric'], ['custom', 'Custom artwork']] }, { k: 'open', l: 'Openness', o: [['20', 'Mostly solid · 20%'], ['35', 'Balanced · 35%'], ['50', 'Airy · 50%']] }],
+  stone: [{ k: 'format', l: 'Slab or tile', o: [['slab', 'Large slab'], ['tile', 'Tile'], ['custom', 'Custom panel']] }, { k: 'surface', l: 'Surface', o: [['polished', 'Polished'], ['honed', 'Honed'], ['flamed', 'Flamed'], ['leather', 'Leather']] }],
+  pustone: [{ k: 'texture', l: 'Texture', o: [['stacked', 'Stacked stone'], ['split', 'Split face'], ['rock', 'Rough rock'], ['slate', 'Slate']] }],
+  hpl: [{ k: 'decor', l: 'Décor', o: [['solid', 'Solid colour'], ['wood', 'Wood décor'], ['stone', 'Stone décor'], ['metallic', 'Metallic']] }],
+  grc: [{ k: 'pattern', l: 'Pattern', o: [['plain', 'Plain'], ['jaali', 'Jaali screen'], ['fluted', 'Fluted'], ['geometric', 'Geometric relief']] }],
+  terracotta: [{ k: 'tone', l: 'Tone', o: [['red', 'Natural red', '#b5653d'], ['sand', 'Sand', '#c9a27a'], ['grey', 'Grey', '#8b8580'], ['glazed', 'Glazed', '#7a4a32']] }, { k: 'spacing', l: 'Baguette spacing', o: [['100', '100 mm'], ['150', '150 mm'], ['200', '200 mm']] }],
+  wood: [{ k: 'tone', l: 'Wood tone', o: [['oak', 'Oak', '#c9a77b'], ['teak', 'Teak', '#a9744a'], ['walnut', 'Walnut', '#6e4a33'], ['ash', 'Ash grey', '#9a958d']] }]};
+const DEF = { glass: { colour: 'grey', appearance: 'tinted' }, acp: { finish: 'solid', groove: '10', surface: 'satin' }, aluminium: { depth: '300', spacing: '600', finish: 'powder' }, metal: { pattern: 'round', open: '35', surface: 'powder' }, stone: { format: 'slab', surface: 'honed' }, pustone: { texture: 'stacked' }, hpl: { decor: 'wood' }, grc: { pattern: 'jaali' }, terracotta: { tone: 'red', spacing: '150' }, wood: { tone: 'teak' } };
+const BRANDS = { acp: ['SuperBond', 'Aludecor', 'Alucobond', 'Viva'], glass: ['Saint-Gobain', 'AIS', 'Guardian'], hpl: ['Stylam', 'Merino', 'Trespa'], aluminium: ['Hindalco', 'Jindal'] };
+const ZROWS = [['upper', 'Upper floors'], ['ground', 'Ground floor'], ['parapet', 'Parapet / crown'], ['balcony', 'Balcony fronts'], ['columns', 'Columns & pillars'], ['entrance', 'Entrance portal']];
+const ZW = { upper: .6, ground: .17, parapet: .05, balcony: .08, columns: .06, entrance: .04 };
+const TIER = ['Value-Smart', 'Balanced', 'Signature Premium', 'Bespoke Luxury'];
+const RATES = { acp: [[200, 260], [260, 360], [380, 520], [550, 750]], glass: [[350, 480], [480, 700], [700, 1000], [1000, 1500]], aluminium: [[300, 450], [450, 650], [650, 950], [950, 1400]], metal: [[450, 650], [650, 950], [950, 1500], [1500, 2500]], stone: [[250, 350], [350, 500], [500, 750], [750, 1200]], pustone: [[220, 300], [300, 420], [420, 550], [550, 750]], hpl: [[380, 480], [480, 600], [600, 750], [750, 950]], grc: [[350, 480], [480, 700], [700, 1100], [1100, 1800]], terracotta: [[350, 500], [580, 780], [780, 1000], [1000, 1400]], wood: [[280, 380], [380, 520], [520, 720], [720, 1000]] };
+const SUBMUL = { spider: 1.3, structural: 1.05, cladding: 0.8 };
+const SIGN_RATE = [[6000, 10000], [10000, 18000], [18000, 30000], [30000, 50000]];
+const LIGHT_RATE = { uplight: [[40, 70], [70, 110], [110, 160], [160, 240]], linear: [[80, 130], [130, 200], [200, 300], [300, 450]] };
+const HEIGHT = [[3, 1.0], [5, 1.04], [8, 1.08], [12, 1.12], [20, 1.18], [999, 1.25]];
+const MASS = { residential: [14, 12, 3.3, 3.1, 1.0], commercial: [30, 20, 4.8, 3.8, 1.1], retail: [22, 16, 5.4, 4.0, 1.2], corporate: [26, 20, 4.6, 3.8, 1.2], hospitality: [32, 16, 4.6, 3.3, 1.1], industrial: [42, 26, 7.5, 6.0, 1.5], institutional: [36, 16, 4.2, 3.8, 1.1], other: [22, 16, 4.2, 3.6, 1.1] };
+const VARS = [['modern', 'Modern', 'Crisp lines, your materials, strong contrast'], ['contemporary', 'Contemporary', 'Warmer mix with a vertical rhythm'], ['minimalist', 'Minimalist', 'One calm material, fewer joints'], ['premium', 'Premium', 'Richer metals, deeper glass, built-in light']];
+const TB = {
+  core: [['pe', 'PE'], ['fr', 'FR'], ['a2', 'A2']], panel: [['3', '3 mm'], ['4', '4 mm'], ['6', '6 mm']], skin: [['0.21', '0.21 mm'], ['0.30', '0.30 mm'], ['0.40', '0.40 mm'], ['0.50', '0.50 mm']], fixing: [['cassette', 'Cassette'], ['tray', 'Tray'], ['routed', 'Routed & folded']],
+  gtype: [['toughened', 'Toughened'], ['laminated', 'Laminated'], ['igu', 'IGU']], gconfig: [['single', 'Single glazed'], ['double', 'Double glazed']], gthick: [['eng', 'Engineer recommendation'], ['custom', 'Custom mm']],
+  sfix: [['dry', 'Mechanical dry cladding'], ['wet', 'Wet adhesive']], coat: [['pvdf', 'PVDF'], ['feve', 'FEVE'], ['pe', 'Polyester (PE)'], ['anod', 'Anodised'], ['advise', 'Terucon to advise']],
+  sub: [['rcc', 'RCC'], ['brick', 'Brick'], ['block', 'Concrete block'], ['steel', 'Steel frame'], ['unsure', 'Not sure']], cond: [['sound', 'Sound'], ['cracks', 'Minor cracks'], ['damp', 'Damp patches'], ['unsure', 'Not sure']],
+  expo: [['inland', 'Inland city'], ['coastal', 'Coastal (< 5 km sea)'], ['industrial', 'Industrial'], ['wind', 'High wind']], prio: [['heat', 'Heat & glare'], ['fire', 'Fire safety (FR/A2)'], ['sound', 'Sound insulation'], ['monsoon', 'Monsoon sealing'], ['maint', 'Low maintenance'], ['coast', 'Coastal durability']] };
+const TB_AUTO = { core: ['pe', 'fr', 'fr', 'a2'], panel: ['3', '4', '4', '6'], skin: ['0.21', '0.30', '0.50', '0.50'], fixing: ['routed', 'cassette', 'cassette', 'cassette'], gtype: ['toughened', 'toughened', 'igu', 'igu'], gconfig: ['single', 'single', 'double', 'double'], gthick: ['eng', 'eng', 'eng', 'eng'], coat: ['pe', 'pvdf', 'pvdf', 'feve'] };
+const DOORS = {
+  inspo: { id: 'D1', name: 'Inspiration photo', steps: [
+    { k: 'photo1', name: 'Your building', t: 'First, your', em: 'building.', sub: 'One clear daytime photo is all we need to begin.' },
+    { k: 'inspo1', name: 'Inspiration', t: 'Now, the look', em: 'you love.', sub: 'We carry over what you like about it — and leave out what you don’t.' },
+    { k: 'basics1', name: 'Basics', t: 'Three quick', em: 'basics.', sub: 'So the design is scaled to your real building and the estimate is grounded.' },
+    { k: 'final1', name: 'Finishing', t: 'Finishing', em: 'touches.', sub: 'Tidy the photo, choose day or evening, and set your comfort level.' },
+    { k: 'review', name: 'Review', t: 'Ready when', em: 'you are.', sub: 'Check your brief, then we create four designs.' }] },
+  guided: { id: 'D2', name: 'Guide me', steps: [
+    { k: 'photo2', name: 'Building', t: 'Let’s start with', em: 'your building.', sub: 'A daytime photo and a few basics — no technical words needed.' },
+    { k: 'scope2', name: 'Scope', t: 'What are we', em: 'changing?', sub: 'The whole front or just part of it, and how big a change you want.' },
+    { k: 'looks2', name: 'Materials', t: 'Looks that', em: 'catch your eye.', sub: 'Pick by feel. We match every choice to real Terucon systems behind the scenes.' },
+    { k: 'colour2', name: 'Colour', t: 'Colour, feel', em: '& pattern.', sub: 'Start from an architect-curated palette, or choose your own shades.' },
+    { k: 'details2', name: 'Details', t: 'The finishing', em: 'details.', sub: 'Highlights, evening lighting and your name on the building.' },
+    { k: 'last2', name: 'Last words', t: 'Lastly,', em: 'what to avoid.', sub: 'Your deal-breakers, and how rich the finish should feel.' },
+    { k: 'review', name: 'Review', t: 'Ready when', em: 'you are.', sub: 'Check your brief, then we create four designs.' }] },
+  expert: { id: 'D3', name: 'Full specification', steps: [
+    { k: 'photo3', name: 'Elevation', t: 'Elevation &', em: 'typology.', sub: 'Primary elevation, building category and known dimensions.' },
+    { k: 'scope3', name: 'Scope', t: 'Scope, depth', em: '& cleanup.', sub: 'Owned floors, zones or a painted mask, transformation depth and site obstructions.' },
+    { k: 'systems3', name: 'Systems', t: 'Facade', em: 'systems.', sub: 'Up to three systems with subtypes, mapped zone by zone.' },
+    { k: 'details3', name: 'Details', t: 'Visible material', em: 'details.', sub: 'Geometry, tint, Terucon swatches and preferred brands.' },
+    { k: 'colour3', name: 'Colour', t: 'Colour &', em: 'composition.', sub: 'Exact shades, RAL/NCS codes, finish, pattern and contrast.' },
+    { k: 'glazing3', name: 'Glazing & light', t: 'Glazing, lighting', em: '& signage.', sub: 'Glass ratio, night lighting and precision signage.' },
+    { k: 'brief3', name: 'Brief & BOQ', t: 'Brief, budget', em: '& BOQ.', sub: 'Deal-breakers, notes, investment magnitude and optional engineering grades.' },
+    { k: 'review', name: 'Review', t: 'Ready when', em: 'you are.', sub: 'Check the specification, then we create four designs.' }] }};
+const IMG_IDS = ['hero-facade', 'door-inspiration', 'door-guided', 'door-expert', 'sample-building', 'inspo-glass-fins', 'inspo-wood-stone', 'inspo-terracotta', 'reference-showroom', 'type-residential', 'type-retail', 'type-corporate', 'type-hospitality', 'type-commercial', 'type-institutional', 'type-industrial', 'type-other', 'system-glass', 'system-acp', 'system-aluminium', 'system-metal', 'system-stone', 'system-pustone', 'system-hpl', 'system-grc', 'system-terracotta', 'system-wood', 'sub-glass-structural', 'sub-glass-semi', 'sub-glass-spider', 'sub-aluminium-louvers', 'sub-aluminium-cladding', 'sub-metal-solid', 'sub-metal-expanded', 'sub-stone-granite', 'sub-stone-marble', 'sub-stone-engineered', 'sub-terracotta-panels', 'treat-full', 'treat-overclad', 'treat-accent', 'tone-light', 'tone-warm', 'tone-bold', 'glass-min', 'glass-balanced', 'glass-max', 'finish-matte', 'finish-satin', 'finish-metallic', 'finish-brushed', 'finish-wood', 'finish-stone', 'pattern-flat', 'pattern-vertical', 'pattern-horizontal', 'pattern-fins', 'pattern-geometric', 'light-day', 'light-uplight', 'light-linear', 'sign-board', 'sign-logo', 'sign-letters', 'result-modern', 'result-contemporary', 'result-minimalist', 'result-premium'];
+const KINDS = ['isCards', 'isChips', 'isSeg', 'isStepper', 'isFloors', 'isToggle', 'isText', 'isFields', 'isSlider', 'isPalettes', 'isSlots', 'isMatrix', 'isProducts', 'isPhoto', 'isExtract', 'isNote', 'isReview', 'isAction'];
+function B(o) { const b = { first: false, qid: '', title: '', help: '', part: '', tag: '', key: '' }; KINDS.forEach(k => { b[k] = false; }); Object.assign(b, o); b.hasHelp = !!b.help; b.hasPart = !!b.part; b.hasTag = !!b.tag; b.pt = b.first ? 24 : 2; b.mt = b.first ? 12 : 0; b.bt = b.first ? '1px solid rgba(41,28,14,.16)' : '0'; b.domId = 'q-' + b.key; return b; }
+const H = (qid, title, help, tag) => ({ first: true, qid, title, help: help || '', tag: tag || '' });
+function chipS(on, neg) { return on ? (neg ? { bg: INK2, ink: CR, bd: INK2 } : { bg: INK, ink: CR, bd: INK }) : { bg: 'rgba(255,255,255,.45)', ink: INK, bd: LINE2 }; }
+function segS(on) { return on ? { bg: INK, ink: CR, bd: INK, subInk: 'rgba(244,236,224,.72)' } : { bg: 'rgba(255,255,255,.45)', ink: INK, bd: LINE, subInk: INK2 }; }
+function cardS(on) { return on ? { bd: INK, sh: '0 0 0 3px rgba(41,28,14,.14), 0 18px 34px -22px rgba(41,28,14,.7)', ck: 1, cks: 1 } : { bd: 'rgba(41,28,14,.1)', sh: 'none', ck: 0, cks: .6 }; }
+function inr(v) { if (!(v > 0)) return '₹0'; if (v >= 1e7) return '₹' + (v / 1e7).toFixed(2) + ' Cr'; if (v >= 1e5) return '₹' + (v / 1e5).toFixed(1) + ' lakh'; return '₹' + Math.round(v / 1000) + 'k'; }
+function inrRange(a, b) { if (a >= 1e5 && b < 1e7) return '₹' + (a / 1e5).toFixed(1) + ' – ' + (b / 1e5).toFixed(1) + ' lakh'; if (a >= 1e7) return '₹' + (a / 1e7).toFixed(2) + ' – ' + (b / 1e7).toFixed(2) + ' Cr'; return inr(a) + ' – ' + inr(b); }
+const n0 = v => Math.round(v).toLocaleString('en-IN');
+const floorName = f => f === 0 ? 'G' : String(f);
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = Object.assign(this.fresh(), { vw: window.innerWidth || 1280, vh: window.innerHeight || 800, imgs: {}, prompts: {}, cat: null, toast: '', draft: null, fx: false, fxErr: '', pvOpen: false, pvTab: null, estOpen: false, linkOpen: '', linkVal: '', err: null, drag: '', gen: null, showJson: false, quote: false, sent: false, dusk: false, customOpen: false, hover3d: null, hoverSys: null });
+    this.hoverOK = typeof matchMedia === 'function' && matchMedia('(hover: hover)').matches;
+    this.unhover = () => { clearTimeout(this.hovT); if (this.state.hoverSys) this.setState({ hoverSys: null }); };
+    this.paths = []; this.timers = [];
+    this.touch = typeof window !== 'undefined' && ('ontouchstart' in window || (navigator.maxTouchPoints || 0) > 0);
+    this.glRef = el => { this.glEl = el; if (el && this.viewer) { this.viewer.attach(el); this.lastCfg = ''; this.syncViewer(); } };
+    this.maskRef = el => this.bindMask(el);
+    this.onResize = () => this.setState({ vw: window.innerWidth, vh: window.innerHeight });
+  }
+  fresh() { return { door: null, step: 0, maxStep: 0, photo: null, extras: [], issues: [], ref: null, refPal: [], refInspo: null, refState: '', transfer: ['vibe', 'materials', 'palette'], avoid: [], notes: '', posNotes: '', negNotes: '',
+    btype: null, bsub: null, floors: 4, sides: 1, scope: 'all', owned: [], zones: [], zones3: ['entire'], strokes: 0, keep: true, remove: [], treat: null, matMode: 'single', looks: [], systems: [], assign: {}, spec: {}, swatch: {}, brands: {},
+    tone: null, glass: null, contrast: null, palette: null, c1: null, c2: null, c3: null, slot: 'c1', ral: '', finish: null, pattern: null, hlEntrance: false, hlTop: false, lighting: 'day', renderTime: 'day',
+    signOn: false, signType: 'letters', signText: '', signLine2: '', signLogo: null, signPos: null, signFin: 'white', signScale: 'medium', signH: '600', signLight: 'none',
+    budget: 45, budgetUnsure: false, dims: { width: '', height: '', city: '' }, dimsOpen: false, boqOpen: false, tb: {}, contact: { name: '', phone: '', email: '' }, variant: 0, view: 'after', done: false }; }
+  componentDidMount() {
+    window.addEventListener('resize', this.onResize);
+    try { const d = JSON.parse(localStorage.getItem(KEY) || 'null'); if (d && d.door) this.setState({ draft: d }); } catch (e) {}
+    fetch((window.__resources || {}).prompts || 'studio-images.json').then(r => r.json()).then(j => { const p = {}; (j.groups || []).forEach(g => (g.images || []).forEach(x => { p[x.id] = x.prompt + ' ' + (j.tail || ''); })); this.setState({ prompts: p }); }).catch(() => {});
+    this.preload();
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); this.timers.forEach(clearTimeout); }
+  componentDidUpdate(pp, ps) {
+    this.syncViewer();
+    const s = this.state;
+    if (s.step !== this._pStep || s.door !== this._pDoor) { if (this._pDoor !== undefined) { try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {} } this._pStep = s.step; this._pDoor = s.door; }
+    if (s.door) { clearTimeout(this.saveT); this.saveT = setTimeout(() => this.saveDraft(), 500); }
+  }
+  later(fn, ms) { const t = setTimeout(fn, ms); this.timers.push(t); return t; }
+  toast(msg) { clearTimeout(this.toastT); this.setState({ toast: msg }); this.toastT = this.later(() => this.setState({ toast: '' }), 3200); }
+  saveDraft() { const s = this.state, d = {}; Object.keys(this.fresh()).forEach(k => { d[k] = s[k]; }); d.savedAt = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) { try { d.photo = d.photo && d.photo.source === 'sample' ? d.photo : null; d.ref = d.ref && d.ref.source === 'gallery' ? d.ref : null; d.extras = []; d.signLogo = null; localStorage.setItem(KEY, JSON.stringify(d)); } catch (e2) {} } }
+  preload() {
+    const go = () => { const q = IMG_IDS.slice(), found = {}, exts = ['jpg', 'png', 'webp']; let pending = {}, flushT = null;
+      const flush = () => { flushT = null; const p = pending; pending = {}; this.setState(st => ({ imgs: Object.assign({}, st.imgs, p) })); };
+      const put = (id, v) => { pending[id] = v; if (!flushT) flushT = setTimeout(flush, 120); };
+      const next = () => { const id = q.shift(); if (!id) return; const tryIt = i => { if (i >= exts.length) { put(id, false); next(); return; } const url = 'img/studio/' + id + '.' + exts[i], im = new Image(); im.decoding = 'async'; im.onload = () => { put(id, url); next(); }; im.onerror = () => tryIt(i + 1); im.src = url; }; tryIt(0); };
+      for (let k = 0; k < 6; k++) next(); };
+    if (document.readyState === 'complete') this.later(go, 50); else window.addEventListener('load', () => this.later(go, 50), { once: true });
+  }
+  async loadFx() {
+    if (this.fxLoading) return; this.fxLoading = true;
+    try { const RS = window.__resources || {}, fx = await import(RS.fx3d || new URL('facade3d-v4.js?v=4b', document.baseURI).href); this.fx = fx; this.viewer = await fx.createViewer(RS.three || new URL('three.module.js', document.baseURI).href); if (this.viewer.on) { this.viewer.on('pick', e => this.onModelPick(e)); this.viewer.on('hover', v => this.setState({ hover3d: v })); } if (this.glEl) this.viewer.attach(this.glEl); this.lastCfg = ''; this.setState({ fx: true }); }
+    catch (e) { console.warn('3D unavailable', e); this.setState({ fxErr: '3D preview is not available on this device.' }); }
+  }
+  im(id) { const s = this.state, u = s.imgs[id], help = this.props.promptHelpers ?? true, miss = u === false; return { img: u || '', hasImg: !!u, isPh: miss, hasPh: miss && help, ph: 'img/studio/' + id + '.jpg', canCopy: miss && help && !!s.prompts[id], onCopy: e => { stop(e); this.copyPrompt(id); } }; }
+  copyText(t, ok) { const done = () => this.toast(ok); try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(t).then(done, () => this.copyFallback(t, done)); return; } } catch (e) {} this.copyFallback(t, done); }
+  copyFallback(t, done) { try { const a = document.createElement('textarea'); a.value = t; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); done(); } catch (e) { this.toast('Copy failed — the prompt is in IMAGE-PROMPTS.md'); } }
+  copyPrompt(id) { const p = this.state.prompts[id]; if (p) this.copyText(p, 'Prompt copied. Paste it into ChatGPT, then save the image as img/studio/' + id + '.jpg'); }
+  /* ---------- doors & navigation ---------- */
+  steps() { const d = DOORS[this.state.door]; return d ? d.steps : []; }
+  startDoor(door, extra) { this.paths = []; this.setState(Object.assign(this.fresh(), { door, draft: null, pvTab: null, pvOpen: false, gen: null, showJson: false, quote: false, sent: false }, extra || {})); }
+  startFromSystem(k) { this.startDoor('guided', { looks: [LOOK_OF[k] || 'panels'] }); this.toast((SYS[k] || {}).l + ' is already chosen — you can change it in step 3.'); }
+  goStep(i) { const n = this.steps().length; this.setState(st => ({ step: clamp(i, 0, n), maxStep: Math.max(st.maxStep, i), gen: null, quote: false, pvTab: null, hoverSys: null, hover3d: null })); if (this.viewer && this.viewer.reset) this.viewer.reset(); }
+  canNext() {
+    const s = this.state, k = (this.steps()[s.step] || {}).k;
+    if (/^photo/.test(k) && !s.photo) return [false, 'Add a photo of your building to continue'];
+    if ((k === 'photo2' || k === 'photo3' || k === 'basics1') && !s.btype) return [false, 'Choose the building type to continue'];
+    if (k === 'inspo1' && !s.ref) return [false, 'Add an inspiration photo, or pick one of ours'];
+    if ((k === 'basics1' || k === 'scope2' || k === 'scope3') && s.scope === 'floors' && !s.owned.filter(f => f < s.floors).length) return [false, 'Pick at least one of your floors'];
+    if ((k === 'basics1' || k === 'scope2') && s.scope === 'zones' && !s.zones.length) return [false, 'Pick at least one area'];
+    if (k === 'scope3' && !s.zones3.length) return [false, 'Pick at least one zone'];
+    if (k === 'looks2' && !s.looks.length) return [false, 'Pick at least one look you like'];
+    if (k === 'systems3' && !s.systems.length) return [false, 'Select at least one facade system'];
+    return [true, ''];
+  }
+  next() { const [ok, msg] = this.canNext(); if (!ok) { this.toast(msg); return; } const s = this.state, n = this.steps().length; if (s.step === n - 1) { this.generate(); return; } this.goStep(s.step + 1); }
+  back() { const s = this.state; if (s.step === 0) { this.setState({ door: null, draft: Object.assign({}, s) }); return; } this.goStep(s.step - 1); }
+  exit() { this.saveDraft(); let d = null; try { d = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {} this.setState({ door: null, draft: d }); this.toast('Saved in this browser — continue any time.'); }
+  generate() {
+    const n = this.steps().length; this.setState({ step: n, maxStep: n, gen: { i: 0 }, done: false, view: 'after', variant: 0, showJson: false, quote: false, sent: false });
+    const stages = this.genStages().length; for (let i = 1; i <= stages; i++) this.later(() => this.setState(i === stages ? { gen: null, done: true } : { gen: { i } }), i * 950);
+  }
+  genStages() { const s = this.state; return ['Reading your photo — windows, doors and railings locked', s.door === 'inspo' ? 'Studying your inspiration photo' : 'Mapping your choices to Terucon systems', 'Applying your likes and deal-breakers', 'Rendering Modern, Contemporary, Minimalist and Premium']; }
+  /* ---------- photos ---------- */
+  err(which, msg) { this.setState({ err: { which, msg } }); }
+  onFile(e, which) { const f = e.target && e.target.files && e.target.files[0]; if (e.target) e.target.value = ''; this.readFile(f, which); }
+  onDrop(e, which) { e.preventDefault(); this.setState({ drag: '' }); const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) this.readFile(f, which); }
+  readFile(f, which) {
+    if (!f) return;
+    if (/heic|heif/i.test((f.type || '') + f.name)) return this.err(which, 'HEIC photos can’t be opened here — please choose a JPG or PNG.');
+    if (!/^image\//.test(f.type || '')) return this.err(which, 'That file isn’t a photo. Use JPG, PNG or WEBP.');
+    const r = new FileReader(); r.onload = () => this.loadImg(r.result, { name: f.name, source: 'upload' }, which); r.readAsDataURL(f);
+  }
+  importLink(which) { const u = (this.state.linkVal || '').trim(); if (!/^https?:\/\//i.test(u)) return this.err(which, 'Paste a full link starting with https://'); this.loadImg(u, { name: u.replace(/^https?:\/\//, '').split(/[?#]/)[0].slice(0, 60), source: 'link' }, which); }
+  loadImg(url, meta, which) {
+    const img = new Image(), remote = /^https?:/i.test(url); if (remote) img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      let out = url, a = { issues: [], pal: [] };
+      try { if (!/^img\//.test(url)) { const sc = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight)), c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * sc); c.height = Math.round(img.naturalHeight * sc); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); out = c.toDataURL('image/jpeg', 0.86); } a = this.analyse(img); } catch (e) {}
+      const P = Object.assign({ url: out, w: img.naturalWidth, h: img.naturalHeight }, meta);
+      if (which === 'ref') { this.setState({ ref: P, refInspo: null, refPal: a.pal, refState: 'reading', linkOpen: '', linkVal: '', err: null, pvTab: this.state.photo ? 'ref' : null }); this.later(() => this.setState({ refState: 'done' }), 1500); }
+      else if (which === 'logo') this.setState({ signLogo: { url: out, name: meta.name } });
+      else { this.paths = []; this.setState({ photo: P, issues: a.issues, linkOpen: '', linkVal: '', err: null, pvTab: null, strokes: 0 }); }
+    };
+    img.onerror = () => this.err(which, remote ? 'We couldn’t open that link. Save the photo to your device and upload it instead.' : 'We couldn’t open that photo. Please try another one.');
+    img.src = url;
+  }
+  analyse(img) {
+    const w = 160, h = Math.max(16, Math.round(160 * img.naturalHeight / img.naturalWidth)), c = document.createElement('canvas'); c.width = w; c.height = h;
+    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(img, 0, 0, w, h); const d = x.getImageData(0, 0, w, h).data, g = new Float32Array(w * h); let sum = 0;
+    for (let i = 0; i < w * h; i++) { const v = .299 * d[i * 4] + .587 * d[i * 4 + 1] + .114 * d[i * 4 + 2]; g[i] = v; sum += v; }
+    let lap = 0, n = 0; for (let y = 1; y < h - 1; y++) for (let X = 1; X < w - 1; X++) { const i = y * w + X, L = 4 * g[i] - g[i - 1] - g[i + 1] - g[i - w] - g[i + w]; lap += L * L; n++; }
+    const issues = [], mean = sum / (w * h); if (mean < 55) issues.push('This photo looks quite dark. A daytime photo gives a much more accurate design.'); if (lap / n < 35) issues.push('This photo looks a little blurry. Hold the phone steady, or step back so the whole front fits.'); if (Math.max(img.naturalWidth, img.naturalHeight) < 900) issues.push('This photo is small. A larger one keeps material detail sharp.');
+    const bins = {}; for (let i = 0; i < w * h; i += 3) { const r = d[i * 4] >> 5, gg = d[i * 4 + 1] >> 5, b = d[i * 4 + 2] >> 5, k = (r << 6) | (gg << 3) | b; bins[k] = (bins[k] || 0) + 1; }
+    const pal = []; Object.keys(bins).sort((a, b) => bins[b] - bins[a]).forEach(k => { if (pal.length >= 5) return; k = +k; const rgb = [((k >> 6) & 7) * 32 + 16, ((k >> 3) & 7) * 32 + 16, (k & 7) * 32 + 16]; if (pal.every(p => Math.abs(p[0] - rgb[0]) + Math.abs(p[1] - rgb[1]) + Math.abs(p[2] - rgb[2]) > 70)) pal.push(rgb); });
+    return { issues, pal: pal.map(p => '#' + p.map(v => v.toString(16).padStart(2, '0')).join('')) };
+  }
+  addExtras(e) { const fs = Array.from((e.target && e.target.files) || []); if (e.target) e.target.value = ''; fs.slice(0, 4).forEach(f => { if (!/^image\//.test(f.type)) return; const r = new FileReader(); r.onload = () => { const im = new Image(); im.onload = () => { const sc = Math.min(1, 900 / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas'); c.width = Math.round(im.naturalWidth * sc); c.height = Math.round(im.naturalHeight * sc); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); const url = c.toDataURL('image/jpeg', .8); this.setState(st => ({ extras: st.extras.concat([{ url, name: f.name }]).slice(0, 6) })); }; im.src = r.result; }; r.readAsDataURL(f); }); }
+  useSample() { const s = this.state; let url = s.imgs['sample-building']; if (!url && this.viewer && this.viewer.snapshot) { try { url = this.viewer.snapshot(); } catch (e) {} } if (!url) { this.toast('The sample is still loading — try again in a moment.'); if (!this.viewer) this.loadFx(); return; } this.loadImg(url, { name: 'Sample building', source: 'sample' }, 'photo'); if (!s.btype) this.setState({ btype: 'commercial', floors: 6 }); }
+  pickInspo(k) { const p = INSPO.find(x => x.k === k), s = this.state; if (!p) return; this.setState({ ref: { url: s.imgs[p.img] || '', name: p.l, source: 'gallery', w: 3, h: 2 }, refInspo: k, refPal: p.pal, refState: 'reading', err: null, pvTab: s.photo ? 'ref' : null }); this.later(() => this.setState({ refState: 'done' }), 1300); }
+  /* ---------- brush mask ---------- */
+  bindMask(el) {
+    if (this.maskEl === el) return; this.maskEl = el; if (!el) return;
+    const fit = () => { const r = el.getBoundingClientRect(), dp = window.devicePixelRatio || 1, W = Math.round(r.width * dp), Hh = Math.round(r.height * dp); if (W && (el.width !== W || el.height !== Hh)) { el.width = W; el.height = Hh; this.redrawMask(); } };
+    const pt = e => { const r = el.getBoundingClientRect(); return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height]; }; let down = false;
+    el.addEventListener('pointerdown', e => { fit(); down = true; try { el.setPointerCapture(e.pointerId); } catch (x) {} this.paths.push([pt(e)]); this.redrawMask(); });
+    el.addEventListener('pointermove', e => { if (!down) return; this.paths[this.paths.length - 1].push(pt(e)); this.redrawMask(); });
+    const up = () => { if (!down) return; down = false; this.setState({ strokes: this.paths.length }); }; el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+    setTimeout(fit, 60);
+  }
+  redrawMask() { const el = this.maskEl; if (!el) return; const x = el.getContext('2d'); x.clearRect(0, 0, el.width, el.height); x.lineCap = 'round'; x.lineJoin = 'round'; x.strokeStyle = 'rgba(245,179,87,.55)'; x.lineWidth = Math.max(14, el.width * .045); this.paths.forEach(p => { x.beginPath(); p.forEach(([u, v], i) => i ? x.lineTo(u * el.width, v * el.height) : x.moveTo(u * el.width, v * el.height)); if (p.length === 1) x.lineTo(p[0][0] * el.width + .1, p[0][1] * el.height); x.stroke(); }); }
+  clearMask() { this.paths = []; this.redrawMask(); this.setState({ strokes: 0 }); }
+  /* ---------- state helpers ---------- */
+  set(k, v) { this.setState({ [k]: v }); }
+  flip(k) { this.setState(st => ({ [k]: !st[k] })); }
+  toggleIn(k, v, max) { this.setState(st => { const a = st[k] || [], on = a.indexOf(v) >= 0; let next = on ? a.filter(x => x !== v) : a.concat([v]); if (max && next.length > max) next = next.slice(next.length - max); return { [k]: next }; }); }
+  setFloors(n) { n = clamp(Math.round(+n || 1), 1, 60); this.setState(st => ({ floors: n, owned: st.owned.filter(f => f < n) })); }
+  setType(k) { const t = TYPE(k), s = this.state; this.setState({ btype: k, bsub: null, floors: s.btype ? s.floors : t.fl, signPos: s.signPos }); }
+  toggleFloor(f) { this.toggleIn('owned', f); }
+  setLooks(k) { const s = this.state, max = s.matMode === 'mixed' ? 2 : 1; if (max === 1) { this.setState({ looks: s.looks[0] === k ? [] : [k] }); return; } this.toggleIn('looks', k, 2); }
+  setMatMode(m) { this.setState(st => ({ matMode: m, looks: m === 'single' ? st.looks.slice(0, 1) : st.looks })); }
+  toggleSystem(k) { this.setState(st => { const has = st.systems.find(x => x.key === k); let next = has ? st.systems.filter(x => x.key !== k) : st.systems.concat([{ key: k, sub: (SYS[k].subs[0] || [''])[0], base: k === 'metal' ? 'al' : '' }]); if (next.length > 3) { this.toast('Up to three systems — the oldest pick was replaced.'); next = next.slice(1); } return { systems: next, assign: {} }; }); }
+  setSub(k, sub) { this.setState(st => ({ systems: st.systems.map(x => x.key === k ? Object.assign({}, x, { sub }) : x) })); }
+  setBase(k, base) { this.setState(st => ({ systems: st.systems.map(x => x.key === k ? Object.assign({}, x, { base }) : x) })); }
+  setSpec(sys, k, v) { this.setState(st => ({ spec: Object.assign({}, st.spec, { [sys]: Object.assign({}, st.spec[sys] || {}, { [k]: v }) }) })); }
+  setTB(k, v, multi) { this.setState(st => { const cur = st.tb[k]; let nv = v; if (multi) { const a = Array.isArray(cur) ? cur : []; nv = a.indexOf(v) >= 0 ? a.filter(x => x !== v) : a.concat([v]); } return { tb: Object.assign({}, st.tb, { [k]: nv }) }; }); }
+  setDim(k, v) { this.setState(st => ({ dims: Object.assign({}, st.dims, { [k]: v }) })); }
+  setContact(k, v) { this.setState(st => ({ contact: Object.assign({}, st.contact, { [k]: v }) })); }
+  pickShade(hex, name) { const s = this.state; this.setState({ [s.slot]: { hex, name }, palette: null }); }
+  applyRal(v) { const s = this.state, m = String(v).match(/(\d{4})/); this.setState({ ral: v }); if (m && RAL[m[1]]) this.setState({ [s.slot]: { hex: RAL[m[1]], name: 'RAL ' + m[1] }, palette: null }); }
+  savePalette() { const s = this.state, c = ['c1', 'c2', 'c3'].map(k => s[k] && s[k].hex).filter(Boolean); if (!c.length) { this.toast('Pick at least one colour first.'); return; } let list = []; try { list = JSON.parse(localStorage.getItem('terucon.facade.palettes') || '[]'); } catch (e) {} list.unshift({ at: Date.now(), colours: c }); try { localStorage.setItem('terucon.facade.palettes', JSON.stringify(list.slice(0, 12))); } catch (e) {} this.toast('Palette saved in this browser.'); }
+  /* ---------- derived ---------- */
+  sysList() {
+    const s = this.state;
+    if (s.door === 'inspo') { const p = INSPO.find(x => x.k === s.refInspo); return p ? p.sys.map(([key, sub]) => ({ key, sub })) : (s.ref ? [{ key: 'acp', sub: '' }, { key: 'glass', sub: 'curtain' }] : []); }
+    if (s.door === 'guided') return uniq(s.looks.map(k => LOOKS.find(l => l.k === k).sys)).map(key => ({ key, sub: (SYS[key].subs[0] || [''])[0] }));
+    if (s.door === 'expert') return s.systems.map(x => ({ key: x.key, sub: x.sub, base: x.base }));
+    return [];
+  }
+  colours() { const s = this.state; if (s.door === 'inspo') return s.refPal.slice(0, 3); if (s.palette) { const p = PALETTES.find(x => x.k === s.palette); return p ? p.c : []; } return [s.c1, s.c2, s.c3].map(c => c && c.hex).filter(Boolean); }
+  colourFor(key, solidIdx) { const s = this.state, sp = Object.assign({}, DEF[key], s.spec[key] || {}); if (key === 'glass') return ((VIS.glass[0].o.find(o => o[0] === sp.colour) || [])[2]) || SYS.glass.hex; const c = this.colours(); if (c[solidIdx]) return c[solidIdx]; const tone = (VIS[key] || []).find(q => q.k === 'tone'); if (tone) { const o = tone.o.find(o => o[0] === sp.tone); if (o) return o[2]; } return SYS[key].hex; }
+  autoAssign(keys) { const out = {}; if (!keys.length) return out; if (keys.length === 1) { ZROWS.forEach(([z]) => { out[z] = keys[0]; }); return out; } const glass = keys.indexOf('glass') >= 0, solid = keys.filter(k => k !== 'glass'), a = solid[0] || keys[0], b = solid[1] || a, c = solid[2]; out.upper = glass ? 'glass' : a; out.ground = a; out.parapet = b; out.balcony = c || b; out.columns = b; out.entrance = glass && solid.length ? (c || b) : b; if (!glass && keys.length === 2) { out.ground = b; } return out; }
+  assignMap(keys) { const s = this.state, auto = this.autoAssign(keys); if (s.door !== 'expert') return auto; const out = {}; ZROWS.forEach(([z]) => { out[z] = s.assign[z] && keys.indexOf(s.assign[z]) >= 0 ? s.assign[z] : auto[z]; }); return out; }
+  dims() { const s = this.state, m = MASS[s.btype || 'commercial'], N = s.floors; const w = +s.dims.width > 0 ? +s.dims.width : m[0], d = m[1], gh = m[2], fh = m[3], par = m[4]; const H = +s.dims.height > 0 ? +s.dims.height : gh + (N - 1) * fh + par; const perim = s.sides === 1 ? w : s.sides === 2 ? w + d : s.sides === 3 ? w + 2 * d : 2 * w + 2 * d; return { w, d, gh, fh, par, H, perim, gross: perim * H, N }; }
+  scopeFrac(D) {
+    const s = this.state; let f = 1;
+    if (s.scope === 'floors') { const o = s.owned.filter(x => x < s.floors); f = o.length ? clamp(o.reduce((a, x) => a + (x === 0 ? D.gh : D.fh), 0) / D.H, 0, 1) : 0; }
+    if (s.door === 'expert') { const z = s.zones3; if (z.indexOf('entire') < 0) { const W = { front: D.w / D.perim, side: s.sides >= 2 ? (D.perim - D.w * (s.sides === 4 ? 2 : 1)) / D.perim : 0, rear: s.sides === 4 ? D.w / D.perim : 0, ground: D.gh / D.H, upper: 1 - (D.gh + D.par) / D.H, balcony: .18, columns: .1, entrance: .06, parapet: D.par / D.H + .03, brush: .25 }; f *= clamp(z.reduce((a, k) => a + (W[k] || 0), 0), 0.04, 1); } }
+    else if (s.scope === 'zones') { const W = { entrance: .06, columns: .1, balcony: .18, parapet: .07, brush: .25 }; f = clamp(s.zones.reduce((a, k) => a + (W[k] || 0), 0), 0.04, 1); }
+    return f;
+  }
+  split(sys) {
+    const s = this.state, keys = sys.map(x => x.key), out = {}; if (!keys.length) return out; if (keys.length === 1) { out[keys[0]] = 1; return out; }
+    if (s.door === 'expert') { const A = this.assignMap(keys); let tot = 0; keys.forEach(k => { out[k] = 0; }); Object.keys(ZW).forEach(z => { if (A[z]) { out[A[z]] += ZW[z]; tot += ZW[z]; } }); keys.forEach(k => { out[k] = tot ? out[k] / tot : 1 / keys.length; }); return out; }
+    const base = keys.length === 2 ? [.7, .3] : [.55, .3, .15]; keys.forEach((k, i) => { out[k] = base[i]; });
+    if (out.glass !== undefined) { const g = { min: .15, balanced: .35, max: .6 }[s.glass || 'balanced'], rest = 1 - out.glass; keys.forEach(k => { out[k] = k === 'glass' ? g : out[k] / rest * (1 - g); }); }
+    return out;
+  }
+  tier() { const s = this.state; return s.budgetUnsure ? 1 : Math.min(3, Math.floor(s.budget / 25)); }
+  complexity() { const s = this.state, b = s.budgetUnsure ? 50 : s.budget; return b < 34 ? 'simple' : b < 67 ? 'moderate' : 'detailed'; }
+  lightKey() { const s = this.state; return s.door === 'inspo' ? (s.renderTime === 'day' ? 'day' : 'uplight') : s.lighting; }
+  signW(D) { const s = this.state; if (!s.signOn) return 0; const pos = s.signPos || 'entrance', base = pos === 'entrance' ? 3 : pos === 'front' ? Math.min(D.w * .6, 12) : D.w * .5; const sc = s.door === 'guided' ? { subtle: .8, medium: 1, bold: 1.3 }[s.signScale] : s.door === 'expert' ? +s.signH / 600 : 1; return base * (sc || 1); }
+  est() {
+    const s = this.state, D = this.dims(), tier = this.tier(), t = s.budgetUnsure ? .5 : clamp((s.budget - tier * 25) / 25, 0, 1), frac = this.scopeFrac(D), m2 = D.gross * frac, sqft = m2 * 10.764;
+    const band = r => s.budgetUnsure ? r : [r[0] + (r[1] - r[0]) * t * .5, r[1] - (r[1] - r[0]) * (1 - t) * .5];
+    let sys = this.sysList(); const typical = !sys.length || (s.door === 'inspo' && !s.refInspo); if (!sys.length) sys = [{ key: 'acp', sub: '' }];
+    const sp = this.split(sys), lines = []; let lo = 0, hi = 0;
+    sys.forEach(x => { const r = RATES[x.key]; if (!r) return; const [a, b] = band(r[tier]), mul = SUBMUL[x.sub] && (x.key === 'glass' || x.key === 'aluminium') ? SUBMUL[x.sub] : 1, ft = sqft * (sp[x.key] || 0), subL = x.sub ? ((SYS[x.key].subs.find(q => q[0] === x.sub) || [])[1] || '') : ''; const L = ft * a * mul, Hh = ft * b * mul; lo += L; hi += Hh; lines.push({ label: SYS[x.key].l + (subL ? ' · ' + subL : '') + (typical ? ' (typical)' : ''), sub: n0(ft) + ' sq ft · ₹' + Math.round(a * mul) + '–' + Math.round(b * mul) + ' per sq ft', amt: inrRange(L, Hh) }); });
+    if (s.treat === 'replace') { const L = sqft * 30, Hh = sqft * 60; lo += L; hi += Hh; lines.push({ label: 'Remove old cladding', sub: n0(sqft) + ' sq ft', amt: inrRange(L, Hh) }); }
+    const lk = this.lightKey(); if (LIGHT_RATE[lk]) { const [a, b] = band(LIGHT_RATE[lk][tier]), L = sqft * a, Hh = sqft * b; lo += L; hi += Hh; lines.push({ label: lk === 'linear' ? 'Linear integrated LED' : 'Facade uplighting', sub: 'Across the redesigned area', amt: inrRange(L, Hh) }); }
+    const sw = this.signW(D); if (sw) { const [a, b] = band(SIGN_RATE[tier]), L = sw * a, Hh = sw * b; lo += L; hi += Hh; lines.push({ label: 'Signage', sub: sw.toFixed(1) + ' running metres', amt: inrRange(L, Hh) }); }
+    const hm = (HEIGHT.find(h => D.N <= h[0]) || [0, 1.25])[1], cx = { simple: .95, moderate: 1, detailed: 1.15 }[this.complexity()];
+    const sub = [lo * hm * cx, hi * hm * cx]; lines.push({ label: 'Height access & detailing', sub: '×' + hm.toFixed(2) + ' scaffolding/lift · ×' + cx.toFixed(2) + ' ' + this.complexity() + ' detailing', amt: inrRange(sub[0] - lo, sub[1] - hi) });
+    const tot = [sub[0] * 1.18, sub[1] * 1.18]; lines.push({ label: 'GST 18%', sub: 'On supply and installation', amt: inrRange(sub[0] * .18, sub[1] * .18) });
+    return { m2, sqft, lo: tot[0], hi: tot[1], lines, hm, cx, typical, D, frac, sp, sw, tierName: s.budgetUnsure ? 'Undecided · suggest best fit' : TIER[tier] };
+  }
+  modelCfg() {
+    const s = this.state, hv = s.hoverSys; let sys = this.sysList();
+    if (hv && SYS[hv] && !sys.some(x => x.key === hv)) { const it = { key: hv, sub: (SYS[hv].subs[0] || [''])[0] }; if (s.door === 'guided' && s.matMode !== 'mixed') sys = [it]; else if (sys.length >= (s.door === 'expert' ? 3 : 2)) sys = sys.slice(0, -1).concat([it]); else sys = sys.concat([it]); }
+    const keys = sys.map(x => x.key), spec = {}, sysColour = {}; let j = 0;
+    sys.forEach(x => { spec[x.key] = Object.assign({}, DEF[x.key], s.spec[x.key] || {}, { sub: SUB3D[x.sub] || x.sub || undefined }); sysColour[x.key] = this.colourFor(x.key, x.key === 'glass' ? 0 : j++); });
+    let areas = ['entire'];
+    if (s.door === 'expert') areas = s.zones3.indexOf('entire') >= 0 ? ['entire'] : uniq(s.zones3.filter(z => z !== 'brush'));
+    else if (s.scope === 'zones') areas = uniq(s.zones.filter(z => z !== 'brush'));
+    if (!areas.length) areas = ['front'];
+    const A = keys.length > 1 ? this.assignMap(keys) : {}, assign = {}; ['upper', 'ground', 'parapet', 'balcony', 'columns', 'entrance'].forEach(z => { if (A[z]) assign[z] = A[z]; });
+    const c = this.colours(), lk = this.lightKey(), facesBy = { 1: ['front'], 2: ['front', 'right'], 3: ['front', 'right', 'left'], 4: ['front', 'right', 'left', 'rear'] }, pm = this.pickMode();
+    const fin = (SIGN_FIN.find(f => f[0] === s.signFin) || SIGN_FIN[0]);
+    return { type: s.btype || 'commercial', floors: s.floors, width: s.dims.width, height: s.dims.height, owned: s.scope === 'floors' ? s.owned.filter(f => f < s.floors) : null, areas, systems: keys, assign, spec, sysColour,
+      accent: c[1] || '#9c7b52', finish: s.finish, pattern: s.pattern, hlEntrance: s.hlEntrance, hlTop: s.hlTop, glassPref: s.glass || 'balanced', lighting: lk === 'uplight' ? 'facade' : lk === 'linear' ? 'integrated' : 'none',
+      sign: s.signOn ? { type: s.signType, line2: s.signLine2, light: s.signLight, pos: s.signPos || 'entrance', colour: fin[0] === 'brand' ? (c[1] || '#8a6a45') : fin[2], finish: fin[0] === 'steel' ? 'steel' : fin[0] === 'gold' ? 'gold' : 'paint', height: s.door === 'expert' ? s.signH : ({ subtle: '300', medium: '600', bold: '900' }[s.signScale] || '600'), board: s.signType === 'logo' ? (c[1] || '#6E473B') : '#24211f' } : null,
+      brandName: s.signText || 'Your brand', dusk: s.dusk, faces: facesBy[s.sides],
+      floorPick: pm === 'floor', pick: pm === 'zone', pickZones: s.door === 'expert' ? ['entrance', 'columns', 'balcony', 'parapet', 'ground', 'upper'] : ['entrance', 'columns', 'balcony', 'parapet'], highlight: s.door === 'expert' ? s.zones3.filter(z => z !== 'entire') : s.zones };
+  }
+  pvMode() {
+    const s = this.state, steps = this.steps(), k = (steps[s.step] || {}).k || '', isRes = s.step >= steps.length, can3d = s.fx || !s.fxErr;
+    if (s.pvTab === '3d') return can3d ? '3d' : (s.photo ? 'photo' : 'empty');
+    if (s.pvTab === 'ref' && s.ref && s.photo) return 'ref';
+    if (s.pvTab === 'photo' && s.photo) return 'photo';
+    if (!s.photo) return can3d ? '3d' : 'empty';
+    if (/^photo/.test(k) || isRes || this.brushWanted()) return 'photo';
+    if (k === 'inspo1') return s.ref ? 'ref' : 'photo';
+    return can3d ? '3d' : 'photo';
+  }
+  brushWanted() { const s = this.state, k = (this.steps()[s.step] || {}).k; return (k === 'basics1' || k === 'scope2' || k === 'scope3') && (s.door === 'expert' ? s.zones3 : s.zones).indexOf('brush') >= 0; }
+  pickMode() { const s = this.state, k = (this.steps()[s.step] || {}).k; if (k !== 'basics1' && k !== 'scope2' && k !== 'scope3') return null; if (s.scope === 'floors') return 'floor'; if (s.door === 'expert' || s.scope === 'zones') return 'zone'; return null; }
+  onModelPick(e) {
+    const s = this.state; if (!e) return;
+    if (e.kind === 'floor') { if (s.scope === 'floors' && e.floor < s.floors) this.toggleFloor(e.floor); return; }
+    if (s.door === 'expert') { if (ZONES3.some(z => z[0] === e.zone)) this.setState(st => ({ zones3: st.zones3.indexOf(e.zone) >= 0 ? st.zones3.filter(q => q !== e.zone) : st.zones3.filter(q => q !== 'entire').concat([e.zone]) })); }
+    else if (ZONES.some(z => z[0] === e.zone)) this.toggleIn('zones', e.zone);
+  }
+  frameZone(k, on) { if (!this.viewer || !this.viewer.frame || this.pvMode() !== '3d') return; this.viewer.frame(on && k !== 'brush' ? k : null); }
+  hoverFn(k) { return () => { if (!this.hoverOK) return; clearTimeout(this.hovT); this.hovT = setTimeout(() => { if (this.state.hoverSys !== k) this.setState({ hoverSys: k }); }, 90); }; }
+  cap3d() {
+    const s = this.state; if (!s.fx) return ''; const h = s.hover3d, pm = this.pickMode();
+    if (h && h.kind === 'floor') return (h.floor === 0 ? 'Ground floor' : 'Floor ' + h.floor) + (s.owned.indexOf(h.floor) >= 0 ? ' · tap to remove' : ' · tap to add');
+    if (h && h.kind === 'zone') { const ex = s.door === 'expert', cur = ex ? s.zones3 : s.zones, l = ((ex ? ZONES3 : ZONES).find(z => z[0] === h.zone) || [0, h.zone])[1]; return l + (cur.indexOf(h.zone) >= 0 ? ' · tap to remove' : ' · tap to add'); }
+    if (s.hoverSys) return 'Previewing ' + SYS[s.hoverSys].l + ' on your building';
+    if (pm === 'floor') return 'Tap floors on the model to pick them';
+    if (pm === 'zone') return s.door === 'expert' ? 'Tap a zone on the model to add it' : 'Tap the entrance, columns, balconies or parapet';
+    return this.hoverOK ? 'Drag to turn · Ctrl/⌘ + scroll to zoom' : 'Drag sideways to turn · pinch to zoom';
+  }
+  syncViewer() { if (!this.viewer) { if (this.state.door && this.pvMode() === '3d' && this.glEl && !this.fxLoading) this.later(() => this.loadFx(), 250); return; } const on = !!this.state.door && this.pvMode() === '3d' && !!this.glEl; this.viewer.setActive(on); if (!on) return; const cfg = this.modelCfg(), k = JSON.stringify(cfg); if (k !== this.lastCfg) { this.lastCfg = k; try { this.viewer.update(cfg); } catch (e) { console.warn(e); } } }
+  /* ---------- payload ---------- */
+  payload() {
+    const s = this.state, door = DOORS[s.door], e = this.est(), sys = this.sysList(), c = this.colours(), L = (arr, k) => (arr.find(x => x[0] === k) || [])[1] || null;
+    const p = { door: door.id, building_photo: s.photo ? (s.photo.source === 'sample' ? s.photo.url.slice(0, 60) : s.photo.source + ':' + s.photo.name) : null, extra_photos: s.extras.map(x => x.name), photo_quality_flags: s.issues.length ? s.issues : 'ok' };
+    if (s.door === 'inspo') Object.assign(p, { inspiration_photo: s.ref ? s.ref.source + ':' + s.ref.name : null, vision_extract: { style: (INSPO.find(x => x.k === s.refInspo) || {}).style || 'from photo', palette_hex: s.refPal, mapped_systems: sys.map(x => x.key) }, transfer_traits: s.transfer, avoid_tags: s.avoid, tweak_notes: s.notes || null });
+    Object.assign(p, { building_type: s.btype, purpose: s.bsub, floors: s.floors, visible_sides: s.sides, owned_floors: s.scope === 'floors' ? s.owned.filter(f => f < s.floors) : 'all', zones: s.door === 'expert' ? s.zones3 : (s.scope === 'zones' ? s.zones : ['entire']), mask_png: s.strokes ? 'binary mask · ' + s.strokes + ' strokes' : null, keep_surroundings: s.keep, remove_objects: s.remove });
+    if (s.door !== 'inspo') p.transformation_scope = s.treat;
+    if (s.door === 'guided') Object.assign(p, { material_mode: s.matMode, primary_system: sys[0] ? sys[0].key : null, accent_system: sys[1] ? sys[1].key : null, overall_tone: s.tone, glass_ratio: s.glass, glass_contrast: s.contrast, primary_hex: c[0] || null, secondary_hex: c[1] || null, surface_finish: s.finish, facade_pattern: s.pattern, highlight_entrance: s.hlEntrance, highlight_top: s.hlTop, lighting_type: s.lighting, avoid_tags: s.avoid, notes: s.notes || null });
+    if (s.door === 'expert') Object.assign(p, { systems: s.systems.map(x => ({ key: x.key, subtype: x.sub || null, base_metal: x.key === 'metal' ? x.base : undefined })), material_mode: s.systems.length > 1 ? 'mixed' : 'single', zone_assignment: s.systems.length > 1 ? this.assignMap(s.systems.map(x => x.key)) : null, system_visual_specs: sys.reduce((o, x) => { o[x.key] = Object.assign({}, DEF[x.key], s.spec[x.key] || {}); return o; }, {}), terucon_swatch_id: s.swatch, preferred_brands: s.brands, primary_hex: s.c1 && s.c1.hex, secondary_hex: s.c2 && s.c2.hex, tertiary_hex: s.c3 && s.c3.hex, ral_code: s.ral || null, finish: s.finish, pattern: s.pattern, overall_tone: s.tone, glass_contrast: s.contrast, hl_flags: { entrance: s.hlEntrance, top: s.hlTop }, glass_ratio: s.glass, lighting_type: s.lighting, avoid_tags: s.avoid, positive_notes: s.posNotes || null, negative_notes: s.negNotes || null });
+    p.render_time = s.door === 'inspo' ? s.renderTime : (s.lighting !== 'day' ? 'both' : 'day');
+    p.sign_enabled = s.signOn; p.sign_config = s.signOn ? { type: s.signType, text: s.signText, line2: s.signLine2 || null, logo: s.signLogo ? s.signLogo.name : null, pos: s.signPos || 'entrance', finish: s.signFin, scale_mm: s.door === 'expert' ? +s.signH : ({ subtle: 300, medium: 600, bold: 900 }[s.signScale]), light: s.signLight } : null;
+    Object.assign(p, { budget_magnitude: s.budgetUnsure ? null : s.budget, derived_complexity: this.complexity(), rate_tier: e.tierName, dims: { width_m: +s.dims.width || null, height_m: +s.dims.height || null, city: s.dims.city || null } });
+    p.boq = { billable_area_sqft: Math.round(e.sqft), billable_area_m2: Math.round(e.m2), height_access_multiplier: e.hm, system_area_split: Object.keys(e.sp).reduce((o, k) => { o[k] = Math.round(e.sp[k] * e.sqft); return o; }, {}), removal_flag: s.treat === 'replace', lighting_sqft: LIGHT_RATE[this.lightKey()] ? Math.round(e.sqft) : 0, sign_m: +e.sw.toFixed(1), estimate_inr: [Math.round(e.lo), Math.round(e.hi)] };
+    if (Object.keys(s.tb).length) p.boq_engineering_overrides = s.tb;
+    p.guardrails = { preserve_windows_doors: true, strict_catalogue_only: true, complexity: 'f(budget_magnitude)', variations: ['Modern', 'Contemporary', 'Minimalist', 'Premium'] };
+    Object.keys(p).forEach(k => { if (p[k] === undefined) delete p[k]; });
+    return p;
+  }
+  /* ---------- block builders ---------- */
+  chips(list, isOn, pick, neg) { return list.map(o => { const on = isOn(o[0]); return Object.assign({ label: o[1], on, onClick: () => pick(o[0]), hasDot: !!o[2] && /^#/.test(o[2]), dot: /^#/.test(o[2] || '') ? o[2] : '', hasX: !!neg && on }, chipS(on, neg)); }); }
+  seg(list, cur, pick) { return list.map(o => { const on = cur === o[0]; return Object.assign({ label: o[1], sub: o[2] || '', hasSub: !!o[2] && !/^#|^[a-z]+-/.test(o[2]), on, onClick: () => pick(o[0]) }, segS(on)); }); }
+  card(o, on, click, extra) { return Object.assign({ label: o.label, sub: o.sub || '', hasSub: !!o.sub, on, onClick: click, onKey: keyAct(click), onEnter: noop, onLeave: noop, op: 1, tag: '', hasTag: false, showSubs: false, subs: [] }, this.im(o.img), cardS(on), extra || {}); }
+  photoB(key, head, which) {
+    const s = this.state, p = which === 'ref' ? s.ref : s.photo, err = s.err && s.err.which === which ? s.err.msg : '', drag = s.drag === which;
+    return B(Object.assign({ key, isPhoto: true, has: !!p, none: !p, hasUrl: !!(p && p.url), url: p ? p.url : '', name: p ? p.name : '', meta: p ? ({ upload: 'Uploaded', link: 'From a link', sample: 'Sample photo', gallery: 'Terucon inspiration' }[p.source] || '') + (p.w > 10 ? ' · ' + p.w + ' × ' + p.h + ' px' : '') : '',
+      issues: which === 'photo' ? s.issues.map(t => ({ t })) : [], showExtras: which === 'photo', extras: s.extras.map((x, i) => ({ url: x.url, onRemove: () => this.setState(st => ({ extras: st.extras.filter((_, j) => j !== i) })) })), extraLabel: s.extras.length ? '+ Add another view' : '+ Add side views (optional)', onExtra: e => this.addExtras(e),
+      onFile: e => this.onFile(e, which), onRemove: () => which === 'ref' ? this.setState({ ref: null, refInspo: null, refPal: [], refState: '', pvTab: null }) : (this.paths = [], this.setState({ photo: null, issues: [], extras: [], strokes: 0, pvTab: null })), touch: this.touch,
+      linkOpen: s.linkOpen === which, onLinkOpen: () => this.setState({ linkOpen: s.linkOpen === which ? '' : which, err: null }), linkVal: s.linkVal, onLinkVal: e => this.setState({ linkVal: e.target.value }), onLinkGo: () => this.importLink(which), hasErr: !!err, err,
+      showSample: which === 'photo', onSample: () => this.useSample(), dropTitle: which === 'ref' ? 'Drop your inspiration photo here' : 'Drop your building photo here', dropSub: which === 'ref' ? 'A screenshot, a photo or a Pinterest link' : 'JPG, PNG or WEBP · daytime · the whole front in view',
+      dropBd: drag ? INK : LINE2, dropBg: drag ? 'rgba(245,179,87,.18)' : 'rgba(255,255,255,.35)', onDragOver: e => { e.preventDefault(); if (s.drag !== which) this.setState({ drag: which }); }, onDragLeave: () => this.setState({ drag: '' }), onDrop: e => this.onDrop(e, which) }, head));
+  }
+  typeCards(head, part) { const s = this.state; return B(Object.assign({ key: 'type', isCards: true, part, ratio: '4 / 3', min: 150, gapPx: 10, options: TYPES.map(t => this.card({ label: t.l, sub: t.sub, img: 'type-' + t.k }, s.btype === t.k, () => this.setType(t.k))) }, head || {})); }
+  typeChips(head, part, l3) { const s = this.state; return B(Object.assign({ key: 'type', isChips: true, part, options: this.chips(TYPES.map(t => [t.k, l3 ? t.l3 : t.l]), k => s.btype === k, k => this.setType(k)) }, head || {})); }
+  subChips(part) { const s = this.state, t = TYPE(s.btype); return t ? [B({ key: 'bsub', isChips: true, part, options: this.chips(t.subs.map(x => [x, x]), k => s.bsub === k, k => this.set('bsub', s.bsub === k ? null : k)) })] : []; }
+  stepper(part) { const s = this.state, N = s.floors, q = [1, 2, 3, 4, 5, 6, 8, 11]; return B({ key: 'floors', isStepper: true, part, value: String(N), onInput: e => { const v = parseInt(e.target.value, 10); if (v) this.setFloors(v); }, onMinus: () => this.setFloors(N - 1), onPlus: () => this.setFloors(N + 1), readout: N === 1 ? 'G · ground floor only' : 'G+' + (N - 1) + ' · ' + N + ' floors', readout2: 'Including the ground floor', quick: q.map(n => Object.assign({ label: n === 1 ? 'G' : 'G+' + (n - 1), onClick: () => this.setFloors(n) }, chipS(N === n))) }); }
+  sides(part, labels) { const s = this.state, L = labels || [['1', 'Front only', '1 side'], ['2', 'Front + 1 side', 'Corner plot'], ['3', 'Front + 2 sides', 'Three open sides'], ['4', 'All four sides', 'Stand-alone']]; return B({ key: 'sides', isSeg: true, part, min: 130, options: L.map(o => { const on = s.sides === +o[0]; return Object.assign({ label: o[1], sub: o[2], hasSub: true, on, onClick: () => this.set('sides', +o[0]) }, segS(on)); }) }); }
+  floorsB() { const s = this.state, n = s.owned.filter(f => f < s.floors).length; return B({ key: 'owned', isFloors: true, floorsLabel: n ? n + ' of ' + s.floors + ' floors picked' : 'Tap the floors you own or lease', onAll: () => this.set('owned', Array.from({ length: s.floors }, (_, i) => i)), onClear: () => this.set('owned', []), chips: Array.from({ length: s.floors }, (_, f) => Object.assign({ label: floorName(f), on: s.owned.indexOf(f) >= 0, onClick: () => this.toggleFloor(f) }, chipS(s.owned.indexOf(f) >= 0))) }); }
+  scopeB(head, part, labels) {
+    const s = this.state, L = labels || [['all', 'Full front / whole building', 'Recommended'], ['floors', 'Only floors I own or lease', 'Pick G, 1, 2…'], ['zones', 'Only specific areas', 'Entrance, columns, balconies…']];
+    const out = [B(Object.assign({ key: 'scope', isSeg: true, part, min: 180, options: L.map(o => { const on = s.scope === o[0]; return Object.assign({ label: o[1], sub: o[2], hasSub: true, on, onClick: () => this.set('scope', o[0]) }, segS(on)); }) }, head || {}))];
+    if (s.scope === 'floors') out.push(this.floorsB());
+    if (s.scope === 'zones') { out.push(B({ key: 'zones', isChips: true, options: this.chips(ZONES, k => s.zones.indexOf(k) >= 0, k => { this.toggleIn('zones', k); this.frameZone(k, s.zones.indexOf(k) < 0); }) })); if (s.zones.indexOf('brush') >= 0) out.push(this.brushNote()); }
+    return out;
+  }
+  brushNote() { return B({ key: 'brushnote', isNote: true, notes: [{ t: this.state.photo ? 'Brush over the areas you want redesigned on the photo in the preview. Everything else stays untouched.' : 'Add your photo first — then brush over the areas you want redesigned in the preview.' }] }); }
+  cleanupB(head, part) { const s = this.state; return [B(Object.assign({ key: 'keep', isToggle: true, part, label: 'Keep real sky, street & neighbours', sub: 'Recommended — the design looks genuinely built', hasSub: true, on: s.keep, onClick: () => this.flip('keep') }, this.tog(s.keep), head || {})), B({ key: 'remove', isChips: true, part: 'Clear away', options: this.chips(REMOVE, k => s.remove.indexOf(k) >= 0, k => this.toggleIn('remove', k)) })]; }
+  tog(on) { return { track: on ? INK : 'rgba(41,28,14,.22)', knob: on ? 23 : 3 }; }
+  toggleB(key, label, sub, on, click, extra) { return B(Object.assign({ key, isToggle: true, label, sub: sub || '', hasSub: !!sub, on, onClick: click }, this.tog(on), extra || {})); }
+  sliderB(head, part) {
+    const s = this.state, v = s.budget, tier = this.tier(), names = TIER, cx = this.complexity();
+    return [B(Object.assign({ key: 'budget', isSlider: true, part, value: v, op: s.budgetUnsure ? .45 : 1, onChange: e => this.setState({ budget: +e.target.value, budgetUnsure: false }), readout: s.budgetUnsure ? 'We’ll suggest the best fit' : names[tier], readout2: 'Detailing: ' + cx + ' · ' + ['standard grades', 'the usual choice', 'better cores & coatings', 'made-to-order systems'][tier], marks: names.map((n, i) => ({ label: n, onClick: () => this.setState({ budget: i * 25 + 12, budgetUnsure: false }), ink: !s.budgetUnsure && tier === i ? AMB : 'rgba(244,236,224,.6)', align: i === 0 ? 'left' : i === 3 ? 'right' : 'center' })) }, head || {})),
+      this.toggleB('unsure', 'Not sure yet', 'We’ll suggest the right level for your building', s.budgetUnsure, () => this.flip('budgetUnsure'))];
+  }
+  dimsB(optional) { const s = this.state, D = this.dims(), out = []; if (optional) out.push(this.toggleB('dimsOpen', 'Add rough width, height or city', 'Optional — we estimate from your building type and floors', s.dimsOpen, () => this.flip('dimsOpen'))); if (!optional || s.dimsOpen) out.push(B({ key: 'dims', isFields: true, part: optional ? '' : 'Known dimensions (optional)', fields: [{ label: 'Width (m)', value: s.dims.width, ph: '≈ ' + Math.round(MASS[s.btype || 'commercial'][0]), mode: 'decimal', type: 'text', onChange: e => this.setDim('width', e.target.value.replace(/[^\d.]/g, '')) }, { label: 'Height (m)', value: s.dims.height, ph: '≈ ' + Math.round(D.H), mode: 'decimal', type: 'text', onChange: e => this.setDim('height', e.target.value.replace(/[^\d.]/g, '')) }, { label: 'City', value: s.dims.city, ph: 'e.g. Pune', mode: 'text', type: 'text', onChange: e => this.setDim('city', e.target.value) }] })); return out; }
+  signB(door) {
+    const s = this.state, out = []; if (!s.signOn) return out;
+    if (door === 'inspo') out.push(B({ key: 'signtype', isChips: true, part: 'Sign style', options: this.chips(SIGN_T, k => s.signType === k, k => this.set('signType', k)) }));
+    else out.push(B({ key: 'signtype', isCards: true, part: 'Sign style', ratio: '3 / 2', min: 160, gapPx: 10, options: SIGN_T.map(o => this.card({ label: o[1], sub: o[2], img: o[3] }, s.signType === o[0], () => this.set('signType', o[0]))) }));
+    out.push(B({ key: 'signtext', isFields: true, part: 'Name on the building', fields: [{ label: 'Name', value: s.signText, ph: 'e.g. Arvin Residency', mode: 'text', type: 'text', onChange: e => this.set('signText', e.target.value) }, { label: 'Line 2 (optional)', value: s.signLine2, ph: 'e.g. Since 1998', mode: 'text', type: 'text', onChange: e => this.set('signLine2', e.target.value) }] }));
+    if (door === 'inspo' || s.signType === 'logo' || door === 'expert') out.push(B({ key: 'logo', isAction: true, isFile: true, isBtn: false, label: s.signLogo ? 'Replace logo' : 'Upload logo (optional)', onFile: e => this.onFile(e, 'logo'), hasNote: true, note: s.signLogo ? s.signLogo.name : 'PNG or SVG with a clear background works best' }));
+    out.push(B({ key: 'signpos', isSeg: true, part: 'Placement', min: 160, options: this.seg(SIGN_POS, s.signPos || 'entrance', k => this.set('signPos', k)) }));
+    if (door !== 'inspo') out.push(B({ key: 'signfin', isChips: true, part: door === 'expert' ? 'Finish / material' : 'Finish & colour', options: this.chips(SIGN_FIN.map(f => [f[0], f[1], f[2] || (this.colours()[1] || '#8a6a45')]), k => s.signFin === k, k => this.set('signFin', k)) }));
+    if (door === 'guided') out.push(B({ key: 'signscale', isSeg: true, part: 'Scale', min: 120, options: this.seg(SIGN_SCALE, s.signScale, k => this.set('signScale', k)) }));
+    if (door === 'expert') out.push(B({ key: 'signh', isChips: true, part: 'Letter height', options: this.chips(SIGN_H, k => s.signH === k, k => this.set('signH', k)) }));
+    out.push(B({ key: 'signlight', isSeg: true, part: door === 'inspo' ? 'Lit or unlit' : 'Night glow', min: 110, options: this.seg(door === 'inspo' ? [['none', 'Unlit'], ['front', 'Lit']] : SIGN_LIGHT, s.signLight, k => this.set('signLight', k)) }));
+    return out;
+  }
+  gate(key, head, part, yes) { const s = this.state; return B(Object.assign({ key, isSeg: true, part, min: 150, options: this.seg([['no', 'No sign', 'Keep the facade clean'], ['yes', yes || 'Add a sign', 'Name, logo and placement']], s.signOn ? 'yes' : 'no', k => { this.set('signOn', k === 'yes'); this.later(() => this.frameZone('sign', k === 'yes'), 160); }) }, head || {})); }
+  tierB(head) {
+    const s = this.state, keys = this.sysList().map(x => x.key), t = this.tier(), out = [], v = k => s.tb[k] || (TB_AUTO[k] ? TB_AUTO[k][t] : null), ch = (k, part, multi, first) => B(Object.assign({ key: 'tb-' + k, isChips: true, part, options: this.chips(TB[k], x => multi ? (s.tb[k] || []).indexOf(x) >= 0 : v(k) === x, x => this.setTB(k, x, multi)) }, first || {}));
+    const note = B({ key: 'tbnote', isNote: true, notes: [{ t: 'Pre-set from your budget level — tap any option to override. None of this changes how the design looks.' }] });
+    if (head) out.push(B(Object.assign({ key: 'tbhead', isNote: true, notes: [{ t: 'Collected for your quotation only — zero effect on the renders.' }] }, head)));
+    if (keys.indexOf('acp') >= 0) out.push(ch('core', 'ACP core', false, H('BOQ-B1', 'Specify ACP core fire rating, panel & skin thickness, and fabrication fixing.', 'Shown only when ACP is selected—auto-defaulted from your Budget Magnitude Slider if left untouched.')), note, ch('panel', 'Panel thickness'), ch('skin', 'Aluminium skin'), ch('fixing', 'Fixing'));
+    if (keys.indexOf('glass') >= 0) out.push(ch('gtype', 'Glass type', false, H('BOQ-B2', 'Specify glazing safety build-up and thermal configuration.', 'Shown only when Glass is selected—leave on ‘Engineer to recommend’ for automatic wind-load sizing.')), ch('gconfig', 'Configuration'), ch('gthick', 'Thickness'));
+    const stone = keys.indexOf('stone') >= 0, metal = keys.some(k => ['metal', 'aluminium', 'acp'].indexOf(k) >= 0);
+    if (stone || metal) { const h3 = H('BOQ-B3', 'Choose stone fixing system and exterior metal coating chemistry.', 'PVDF coatings hold colour longest in harsh Indian sun; mechanical dry cladding is recommended for taller stone facades.'); if (stone) { out.push(B(Object.assign({ key: 'tb-sfix', isChips: true, part: 'Stone fixing', options: this.chips(TB.sfix, x => (s.tb.sfix || (s.floors > 4 || t > 0 ? 'dry' : 'wet')) === x, x => this.setTB('sfix', x)) }, h3))); } if (metal) out.push(ch('coat', 'Metal coating', false, stone ? null : h3)); }
+    out.push(ch('sub', 'Wall substrate', false, H('BOQ-B4', 'What is the structural wall behind the facade, and what condition is it in?', 'Helps our site engineering team plan anchor fasteners and any wall prep needed before installation.')), ch('cond', 'Condition'));
+    out.push(ch('expo', 'Site', false, H('BOQ-B5', 'Are there special site exposure or technical performance priorities we should engineer for?', 'Coastal salt air, high wind, or strict fire/acoustic codes guide the fasteners and material grades we quote.')), ch('prio', 'Priorities', true));
+    return out;
+  }
+  stepBlocks(k) {
+    const s = this.state, b = [], sysl = this.sysList();
+    switch (k) {
+      case 'photo1': b.push(this.photoB('photo', H('D1-01', 'First, share a clear daytime photo of your building.', 'Stand across the road so the whole front fits in. You can optionally add side angles for better corner continuity.'), 'photo')); break;
+      case 'inspo1': {
+        b.push(this.photoB('ref', H('D1-02', 'Now show us the inspiration facade you fell in love with.', 'Upload a screenshot, photo, or paste a link from Pinterest or the web. Our AI will study its materials, shades, and proportions.'), 'ref'));
+        b.push(B({ key: 'gallery', isCards: true, part: 'Or start from one of ours', ratio: '3 / 2', min: 200, gapPx: 10, options: INSPO.map(p => this.card({ label: p.l, sub: p.style, img: p.img }, s.refInspo === p.k, () => this.pickInspo(p.k))) }));
+        if (s.ref) { const p = INSPO.find(x => x.k === s.refInspo), ready = s.refState === 'done'; b.push(B({ key: 'extract', isExtract: true, reading: !ready, ready, head: ready ? 'What our AI sees in your inspiration' : 'Studying materials, shades and proportions…', pal: s.refPal.map(hex => ({ hex })), rows: p ? [{ k: 'Style', v: p.style }, { k: 'Terucon systems', v: p.sys.map(([kk, sub]) => SYS[kk].l + (sub ? ' · ' + ((SYS[kk].subs.find(q => q[0] === sub) || [])[1] || '') : '')).join(' + ') }, { k: 'Finish', v: p.finish }, { k: 'Pattern rhythm', v: p.pattern }, { k: 'Lighting mood', v: p.light }] : [{ k: 'Palette', v: 'Read from your photo' }, { k: 'Materials & style', v: 'Mapped to Terucon systems when we render' }] })); }
+        b.push(B(Object.assign({ key: 'transfer', isChips: true, options: this.chips(TRANSFER, x => s.transfer.indexOf(x) >= 0, x => this.toggleIn('transfer', x)) }, H('D1-03', 'What specifically caught your eye in this inspiration photo?', 'Tap everything you want us to carry over onto your building—so we copy what you love and don’t copy what you don’t.'))));
+        b.push(B(Object.assign({ key: 'avoid', isChips: true, options: this.chips(AVOID1, x => s.avoid.indexOf(x) >= 0, x => this.toggleIn('avoid', x), true) }, H('D1-04', 'Is there anything in that inspiration look you’d tweak or want to avoid on your building?', 'Telling us your deal-breakers helps the AI get it right on the very first try.', 'Optional'))));
+        b.push(B({ key: 'notes', isText: true, part: 'In your own words', value: s.notes, ph: 'e.g., love the wood fins, keep main wall off-white', aria: 'Tweak notes', onChange: e => this.set('notes', e.target.value) })); break; }
+      case 'basics1': b.push(this.typeChips(H('D1-05', 'Tell us three quick basics about your building.', 'Helps us scale the facade realistically on your 3D model and estimate your surface area without guessing.'), '1 · Building type'), this.stepper('2 · Floors including ground'), this.sides('3 · Visible sides from the road'));
+        b.push(...this.scopeB(H('D1-06', 'How much of the building are we giving this new look?', 'Redesign the full front, or tell us if you only own certain floors or want to focus on specific areas.'))); break;
+      case 'final1': b.push(...this.cleanupB(H('D1-07', 'Should we tidy up distractions in your photo while keeping your real street and sky?', 'Keeping your real surroundings makes the design look genuinely built—just tap anything blocking the view to clear it away.')));
+        b.push(B(Object.assign({ key: 'render', isSeg: true, part: '1 · Lighting', min: 140, options: this.seg(RENDER, s.renderTime, x => this.set('renderTime', x)) }, H('D1-08', 'How would you like to view the result—and should we add your building or business name?', 'Optional: see your facade lit up at evening dusk, or place clean signage on the building.'))), this.gate('signgate', null, '2 · Signage'), ...this.signB('inspo'));
+        b.push(...this.sliderB(H('D1-09', 'Where does your comfort level sit on investment and finish richness?', 'Slide to match your project preference. This tunes the detailing richness and calculates your approximate estimate—add rough width/city if you know them.')), ...this.dimsB(true)); break;
+      case 'photo2': b.push(this.photoB('photo', H('D2-01', 'Let’s start with a clear daytime photo of your building.', 'Upload from your phone or computer—our AI keeps your exact structure and windows intact while transforming the exterior look.'), 'photo'));
+        b.push(this.typeCards(H('D2-02', 'Tell us a little about your building.', 'Pick what best describes your property, how many floors it has, and how many sides face the street.'), '1 · Building type'), ...this.subChips('Purpose (optional)'), this.stepper('2 · Floors including ground'), this.sides('3 · Sides facing the street')); break;
+      case 'scope2': b.push(...this.scopeB(H('D2-03', 'Which parts are we redesigning, and should we tidy up the photo?', 'Keep it simple with the whole front, or pick only the floors or zones you want refreshed—and tap any street clutter to remove.'), '1 · What we redesign', [['all', 'Whole front', 'Recommended'], ['floors', 'Only my floors', 'Pick G, 1, 2…'], ['zones', 'Specific zones', 'Entrance, columns, balconies…']]), ...this.cleanupB(null, '2 · Photo cleanup'));
+        b.push(B(Object.assign({ key: 'treat', isCards: true, ratio: '3 / 2', min: 190, gapPx: 10, options: TREAT.map(o => this.card({ label: o[1], sub: o[2], img: o[3] }, s.treat === o[0], () => this.set('treat', s.treat === o[0] ? null : o[0]))) }, H('D2-04', 'How dramatic a makeover are you picturing?', 'Choose whether you want a complete modern transformation or a lighter refresh that builds on what’s already there.')))); break;
+      case 'looks2': { const max = s.matMode === 'mixed' ? 2 : 1;
+        b.push(B(Object.assign({ key: 'matmode', isSeg: true, min: 150, options: this.seg([['single', 'Single clean look', 'One material throughout'], ['mixed', 'Mix 2 looks', 'A main look plus an accent']], s.matMode, x => this.setMatMode(x)) }, H('D2-05', 'Which exterior materials catch your eye? Pick 1 main look—and optionally 1 accent to pair with it.', 'No industry jargon needed. Tap a single clean look throughout, or combine two complementary textures like warm wood over crisp matte panels.'))));
+        b.push(B({ key: 'looks', isCards: true, ratio: '4 / 3', min: 170, gapPx: 10, options: LOOKS.map(o => { const i = s.looks.indexOf(o.k), on = i >= 0; return this.card({ label: o.l, sub: o.s, img: o.img }, on, () => this.setLooks(o.k), { tag: on && max > 1 ? (i === 0 ? 'Main' : 'Accent') : '', hasTag: on && max > 1, onEnter: this.hoverFn(o.sys), onLeave: this.unhover }); }) }));
+        b.push(B(Object.assign({ key: 'tone', isCards: true, part: '1 · Overall tone', ratio: '3 / 2', min: 150, gapPx: 10, options: TONE.map(o => this.card({ label: o[1], img: o[2] }, s.tone === o[0], () => this.set('tone', s.tone === o[0] ? null : o[0]))) }, H('D2-06', 'What overall mood and glass balance feels right to you?', 'Three quick taste choices that instantly tell our AI whether your building should feel open and airy or bold and architectural.'))));
+        b.push(B({ key: 'glass', isCards: true, part: '2 · Glass feel', ratio: '3 / 2', min: 150, gapPx: 10, options: GLASS.map(o => this.card({ label: o[1], sub: o[3], img: o[2] }, s.glass === o[0], () => this.set('glass', s.glass === o[0] ? null : o[0]))) }));
+        b.push(B({ key: 'contrast', isSeg: true, part: '3 · Glass vs wall look', min: 150, options: this.seg(CONTRAST, s.contrast, x => this.set('contrast', s.contrast === x ? null : x)) })); break; }
+      case 'colour2': b.push(B(Object.assign({ key: 'palettes', isPalettes: true, part: '1 · Colour palette', options: PALETTES.map(p => { const on = s.palette === p.k; return Object.assign({ label: p.l, sub: p.s, c1: p.c[0], c2: p.c[1], on, onClick: () => this.setState({ palette: on ? null : p.k, customOpen: false }) }, segS(on)); }) }, H('D2-07', 'Pick a colour palette, surface feel, and visual pattern you love.', 'Start with one of our architect-curated combinations, or choose your own main and accent shades.'))));
+        b.push(this.toggleB('custom', 'Choose my own main and accent shades', '', s.customOpen, () => this.setState({ customOpen: !s.customOpen, palette: null, slot: 'c1' })));
+        if (s.customOpen) b.push(this.slotsB(['c1', 'c2'], ['Main colour', 'Accent (optional)']), this.shadesB());
+        b.push(B({ key: 'finish', isCards: true, part: '2 · Surface feel', ratio: '1 / 1', min: 110, gapPx: 8, options: FINISH.map(o => this.card({ label: o[1], img: 'finish-' + o[0] }, s.finish === o[0], () => this.set('finish', s.finish === o[0] ? null : o[0]))) }));
+        b.push(B({ key: 'pattern', isCards: true, part: '3 · Pattern', ratio: '4 / 3', min: 130, gapPx: 8, options: PATTERN.map(o => this.card({ label: o[1], img: 'pattern-' + o[0] }, s.pattern === o[0], () => this.set('pattern', s.pattern === o[0] ? null : o[0]))) })); break;
+      case 'details2': b.push(this.toggleB('hlE', 'Frame & highlight the entrance', 'A clear portal draws the eye to the door', s.hlEntrance, () => this.flip('hlEntrance'), H('D2-08', 'Should we draw attention to special areas—and add evening architectural lighting?', 'Framing the entrance or adding soft warm lights can elevate even a simple facade.')), this.toggleB('hlT', 'Accentuate the top edge / crown', 'A crisp band finishes the building against the sky', s.hlTop, () => this.flip('hlTop')));
+        b.push(B({ key: 'lighting', isCards: true, part: 'Lighting', ratio: '3 / 2', min: 160, gapPx: 10, options: LIGHT2.map(o => this.card({ label: o[1], img: o[2] }, s.lighting === o[0], () => this.setState({ lighting: o[0], dusk: o[0] !== 'day' }))) }));
+        b.push(this.gate('signgate', H('D2-09', 'Would you like to display a building or business name on the facade?', 'Great for shops, offices, and apartments—skip in one tap if you want a completely clean exterior.'), '', 'Yes, add a sign'), ...this.signB('guided')); break;
+      case 'last2': b.push(B(Object.assign({ key: 'avoid', isChips: true, part: '1 · Please avoid', options: this.chips(AVOID2, x => s.avoid.indexOf(x) >= 0, x => this.toggleIn('avoid', x), true) }, H('D2-10', 'Lastly: tell us anything you want to AVOID, and set your investment comfort level.', 'Sharing what you dislike keeps the AI strictly aligned with your taste—and your comfort level tunes detailing richness and the estimate you see at the end.'))));
+        b.push(B({ key: 'notes', isText: true, part: 'Any other wishes? (optional)', value: s.notes, ph: 'e.g., keep the ground floor simple, love warm wood near the entrance', aria: 'Wishes', onChange: e => this.set('notes', e.target.value) }), ...this.sliderB(null, '2 · Investment comfort level'), ...this.dimsB(true)); break;
+      case 'photo3': b.push(this.photoB('photo', H('D3-01', 'Upload the primary elevation photograph (plus optional secondary views).', 'High-resolution daytime photos produce the sharpest material textures and accurate shadow geometry.'), 'photo'));
+        b.push(this.typeChips(H('D3-02', 'Define building typology, floor count, visible elevations, and known dimensions.', 'Height and width are optional—enter known meters for exact 3D scaling and tighter BOQ accuracy.'), 'Category', true), ...this.subChips('Subtype'), this.stepper('Floors (1–60)'), this.sides('Visible elevations', [['1', '1 elevation', 'Front'], ['2', '2 elevations', 'Front + side'], ['3', '3 elevations', 'Front + 2 sides'], ['4', '4 elevations', 'All round']]), ...this.dimsB(false)); break;
+      case 'scope3': b.push(B(Object.assign({ key: 'own3', isSeg: true, part: '1 · Owned floors', min: 150, options: this.seg([['all', 'All floors'], ['floors', 'Specific floors']], s.scope === 'floors' ? 'floors' : 'all', x => this.set('scope', x)) }, H('D3-03', 'Set project scope, transformation depth, and photo cleanup rules.', 'Restrict edits to owned floors, specific architectural zones, or a painted mask—and choose which site obstructions to clear.'))));
+        if (s.scope === 'floors') b.push(this.floorsB());
+        b.push(B({ key: 'zones3', isChips: true, part: 'Zones', options: this.chips(ZONES3, x => s.zones3.indexOf(x) >= 0, x => this.setState(st => { let z = st.zones3.indexOf(x) >= 0 ? st.zones3.filter(q => q !== x) : (x === 'entire' ? ['entire'] : st.zones3.filter(q => q !== 'entire').concat([x])); return { zones3: z }; })) }));
+        if (s.zones3.indexOf('brush') >= 0) b.push(this.brushNote());
+        b.push(B({ key: 'treat3', isSeg: true, part: '2 · Transformation depth', min: 140, options: this.seg(TREAT.map(o => [o[0], o[4], o[2]]), s.treat, x => this.set('treat', x)) }), ...this.cleanupB(null, '3 · Photo cleanup')); break;
+      case 'systems3': {
+        b.push(B(Object.assign({ key: 'systems', isCards: true, ratio: '4 / 3', min: 165, gapPx: 10, options: SYS_KEYS.map(k => { const x = s.systems.find(q => q.key === k), on = !!x, sub = x && x.sub ? SYS[k].subs.find(q => q[0] === x.sub) : null, i = s.systems.indexOf(x); return this.card({ label: SYS[k].l, sub: SYS[k].s, img: sub ? sub[2] : 'system-' + k }, on, () => this.toggleSystem(k), { tag: on ? (i === 0 ? 'Primary' : 'Accent ' + i) : '', hasTag: on, onEnter: this.hoverFn(k), onLeave: this.unhover, showSubs: on && SYS[k].subs.length > 0, subs: SYS[k].subs.map(q => Object.assign({ label: q[1], on: x && x.sub === q[0], onClick: e => { stop(e); this.setSub(k, q[0]); } }, chipS(x && x.sub === q[0]))) }); }) }, H('D3-04', 'Select your facade systems (combine up to 3 systems for mixed elevations).', 'Pick a primary cladding or glazing system and pair it with accent systems—tap a card to pick its architectural subtype once.'))));
+        const m = s.systems.find(q => q.key === 'metal'); if (m) b.push(B({ key: 'base', isChips: true, part: 'Metal base', options: this.chips(BASE_METAL, x => m.base === x, x => this.setBase('metal', x)) }));
+        if (s.systems.length > 1) { const keys = s.systems.map(q => q.key), A = this.assignMap(keys); b.push(B(Object.assign({ key: 'assign', isMatrix: true, onAuto: () => { this.setState({ assign: {} }); this.toast('Auto-balanced across the elevation.'); }, rows: ZROWS.map(([z, l]) => ({ label: l, cells: keys.map((kk, j) => { const on = A[z] === kk; return Object.assign({ label: SYS[kk].l, hex: this.colourFor(kk, j), on, onClick: () => this.setState(st => ({ assign: Object.assign({}, this.assignMap(keys), st.assign, { [z]: kk }) })) }, chipS(on)); }) })) }, H('D3-05', 'Where should each selected facade system be placed on the elevation?', 'Shown automatically when 2+ systems are selected—assign each material to its architectural zone and watch the 3D model update live.')))); }
+        break; }
+      case 'details3': {
+        if (!sysl.length) { b.push(B({ key: 'nosys', isNote: true, first: true, qid: 'D3-06', title: 'Fine-tune visible material details.', notes: [{ t: 'Select a facade system in the previous step first.' }] })); break; }
+        let first = true; const head = H('D3-06', 'Fine-tune visible material details, Terucon catalogue swatches, and preferred brands.', 'Set visible visual geometry (fin spacing, glass tint, stone slab vs tile) and optionally lock a specific Terucon product swatch or partner brand.');
+        sysl.forEach(x => { const sp = Object.assign({}, DEF[x.key], s.spec[x.key] || {}); (VIS[x.key] || []).forEach(q => { b.push(B(Object.assign({ key: 'vis-' + x.key + q.k, isChips: true, part: SYS[x.key].l + ' · ' + q.l, options: this.chips(q.o, v => sp[q.k] === v, v => this.setSpec(x.key, q.k, v)) }, first ? head : {}))); first = false; });
+          const prods = (((this.state.cat || {}).systems || []).find(c => c.key === x.key) || {}).products || []; if (prods.length) b.push(B({ key: 'prod-' + x.key, isProducts: true, part: SYS[x.key].l + ' · Terucon swatch (optional)', options: prods.map(p => { const on = s.swatch[x.key] === p.id; return { name: p.name, code: p.id, type: p.type, hex: p.hex || '#ccc', img: p.img || '', hasImg: !!p.img, on, bd: on ? INK : 'rgba(41,28,14,.12)', onClick: () => this.setState(st => ({ swatch: Object.assign({}, st.swatch, { [x.key]: on ? null : p.id }) })) }; }) }));
+          const br = BRANDS[x.key]; if (br) b.push(B({ key: 'brand-' + x.key, isChips: true, part: SYS[x.key].l + ' · Preferred brand', options: this.chips([['ai', 'Let AI pick']].concat(br.map(n => [n, n])), v => (s.brands[x.key] || 'ai') === v, v => this.setState(st => ({ brands: Object.assign({}, st.brands, { [x.key]: v }) }))) })); });
+        break; }
+      case 'colour3': { const three = s.systems.length >= 3;
+        b.push(Object.assign(this.slotsB(three ? ['c1', 'c2', 'c3'] : ['c1', 'c2'], ['Primary', 'Secondary', '3rd accent']), H('D3-07', 'Specify exact colours, RAL/NCS codes, surface finishes, patterns, and contrast.', 'Optional 3rd accent colour unlocks for 3-system mixes; RAL/NCS codes map automatically to accurate visual hex shades.'), { hasHelp: true, part: 'Tap a slot, then pick a shade', hasPart: true, first: true, pt: 24, mt: 12, bt: '1px solid rgba(41,28,14,.16)', hasMeta: false }));
+        b.push(this.shadesB());
+        const m = String(s.ral).match(/(\d{4})/), known = m && RAL[m[1]];
+        b.push(B({ key: 'ral', isFields: true, part: 'Or enter a RAL / NCS code', fields: [{ label: 'Code for the selected slot', value: s.ral, ph: 'e.g. RAL 7016', mode: 'text', type: 'text', onChange: e => this.applyRal(e.target.value) }] }));
+        if (s.ral) b.push(B({ key: 'ralnote', isNote: true, notes: [{ t: known ? 'RAL ' + m[1] + ' mapped to ' + known + ' and applied.' : 'We’ll map this code to an accurate shade when we render.' }] }));
+        b.push(B({ key: 'tone3', isSeg: true, part: 'Overall tone', min: 110, options: this.seg(TONE.map(o => [o[0], o[3]]), s.tone, x => this.set('tone', x)) }), B({ key: 'contrast3', isSeg: true, part: 'Glass-to-solid contrast', min: 150, options: this.seg(CONTRAST, s.contrast, x => this.set('contrast', x)) }),
+          B({ key: 'finish3', isChips: true, part: 'Surface finish', options: this.chips(FINISH, x => s.finish === x, x => this.set('finish', s.finish === x ? null : x)) }), B({ key: 'pattern3', isChips: true, part: 'Pattern geometry', options: this.chips(PATTERN, x => s.pattern === x, x => this.set('pattern', s.pattern === x ? null : x)) }),
+          this.toggleB('hlE3', 'Highlight the entrance', '', s.hlEntrance, () => this.flip('hlEntrance'), { part: 'Highlights' }), this.toggleB('hlT3', 'Highlight the top edge', '', s.hlTop, () => this.flip('hlTop')), B({ key: 'savepal', isAction: true, isBtn: true, isFile: false, label: 'Save palette', bg: 'rgba(41,28,14,.08)', ink: INK, onClick: () => this.savePalette() })); break; }
+      case 'glazing3': b.push(B(Object.assign({ key: 'glass3', isSeg: true, part: '1 · Glass ratio', min: 120, options: this.seg(GLASS.map(o => [o[0], o[1], o[3]]), s.glass, x => this.set('glass', x)) }, H('D3-08', 'Configure glazing proportion, architectural lighting, and facade signage.', 'Control glass-to-solid ratio, dusk lighting fixture style, and optional precision signage with logo upload and letter height.'))));
+        b.push(B({ key: 'light3', isSeg: true, part: '2 · Night lighting', min: 150, options: this.seg(LIGHT3, s.lighting, x => this.setState({ lighting: x, dusk: x !== 'day' })) }), this.gate('signgate', null, '3 · Signage'), ...this.signB('expert')); break;
+      case 'brief3': b.push(B(Object.assign({ key: 'avoid', isChips: true, options: this.chips(AVOID3, x => s.avoid.indexOf(x) >= 0, x => this.toggleIn('avoid', x), true) }, H('D3-09', 'Add design deal-breakers (what to avoid) and any custom architectural notes.', 'Explicitly flag visual styles or artifacts you want excluded from the renders, plus any site-specific design cues.'))));
+        b.push(B({ key: 'pos', isText: true, part: 'Positive brief', value: s.posNotes, ph: 'e.g., 600 mm fin module aligned to window mullions; warm 3000K uplights', aria: 'Positive brief', onChange: e => this.set('posNotes', e.target.value) }), B({ key: 'neg', isText: true, part: 'Negative brief', value: s.negNotes, ph: 'e.g., no gloss finishes, no visible rivets, no blue glass', aria: 'Negative brief', onChange: e => this.set('negNotes', e.target.value) }));
+        b.push(...this.sliderB(H('D3-10', 'Set your project investment magnitude—and optionally specify engineering grades for BOQ.', 'The Budget Magnitude Slider sets detailing richness and baseline BOQ pricing; expand the Engineering BOQ Drawer only if you want to override technical specs upfront.')), this.toggleB('boq', 'Engineering BOQ drawer', 'Optional · core, skin, IGU, fixing, coating, wall and site exposure', s.boqOpen, () => this.flip('boqOpen')));
+        if (s.boqOpen) b.push(...this.tierB()); break;
+      case 'review': b.push(B(Object.assign({ key: 'review', isReview: true, rows: this.reviewRows() }, H('', 'Your brief', 'Tap Edit on any line to change it.'))));
+        b.push(B({ key: 'guard', isNote: true, part: 'Always on', notes: [{ t: 'Your existing windows, doors and railings stay exactly as they are.' }, { t: 'Only Terucon catalogue systems are used. Any extra idea from the AI is labelled as an optional suggestion.' }, { t: 'You get four interpretations: Modern, Contemporary, Minimalist and Premium.' }] })); break;
+    }
+    return b;
+  }
+  slotsB(keys, labels) { const s = this.state, D = { c1: SYS.acp.hex, c2: '#9c7b52', c3: '#5b4636' }; return B({ key: 'slots', isSlots: true, slots: keys.map((k, i) => { const v = s[k], on = s.slot === k; return { label: labels[i], hex: v ? v.hex : D[k], name: v ? v.name + ' · ' + v.hex : 'Not set', on, bd: on ? INK : 'rgba(41,28,14,.14)', bg: on ? 'rgba(255,255,255,.7)' : 'rgba(255,255,255,.4)', onClick: () => this.set('slot', k) }; }) }); }
+  shadesB() { const s = this.state, cur = s[s.slot]; return B({ key: 'shades', isChips: true, options: this.chips(SHADES.map(x => [x[1], x[0] + (x[2] ? ' · ' + x[2] : ''), x[1]]), hex => !!cur && cur.hex === hex, hex => { const x = SHADES.find(q => q[1] === hex); this.pickShade(hex, x[0]); }) }); }
+  reviewRows() {
+    const s = this.state, steps = this.steps(), at = k => () => this.goStep(steps.findIndex(x => x.k === k)), L = (arr, k) => (arr.find(x => x[0] === k) || [])[1], t = TYPE(s.btype), rows = [], sysl = this.sysList(), d = s.door;
+    const photoK = d === 'inspo' ? 'photo1' : d === 'guided' ? 'photo2' : 'photo3', basicsK = d === 'inspo' ? 'basics1' : photoK, scopeK = d === 'inspo' ? 'basics1' : d === 'guided' ? 'scope2' : 'scope3';
+    rows.push({ label: 'Building photo', value: s.photo ? s.photo.name + (s.extras.length ? ' + ' + s.extras.length + ' side view' + (s.extras.length > 1 ? 's' : '') : '') : '—', onEdit: at(photoK) });
+    if (d === 'inspo') rows.push({ label: 'Inspiration', value: (s.ref ? s.ref.name : '—') + (s.transfer.length ? ' · carry over: ' + s.transfer.map(k => L(TRANSFER, k).replace(/^The /, '')).join(', ') : ''), onEdit: at('inspo1') });
+    rows.push({ label: 'Building', value: (t ? (d === 'expert' ? t.l3 : t.l) : '—') + (s.bsub ? ' · ' + s.bsub : '') + ' · ' + (s.floors === 1 ? 'G' : 'G+' + (s.floors - 1)) + ' · ' + s.sides + ' visible side' + (s.sides > 1 ? 's' : ''), onEdit: at(basicsK) });
+    const sc = s.scope === 'floors' ? 'Floors ' + s.owned.filter(f => f < s.floors).sort((a, b) => a - b).map(floorName).join(', ') : d === 'expert' ? 'All floors' : s.scope === 'zones' ? s.zones.map(z => L(ZONES, z)).join(', ') : 'Whole front';
+    rows.push({ label: 'Scope', value: sc + (d === 'expert' ? ' · zones: ' + s.zones3.map(z => L(ZONES3, z)).join(', ') : '') + (s.treat ? ' · ' + L(TREAT, s.treat) : ''), onEdit: at(scopeK) });
+    rows.push({ label: 'Photo cleanup', value: (s.keep ? 'Keep real sky & street' : 'Replace surroundings') + (s.remove.length ? ' · clear ' + s.remove.map(k => L(REMOVE, k).toLowerCase()).join(', ') : ''), onEdit: at(d === 'inspo' ? 'final1' : scopeK) });
+    if (d !== 'inspo') rows.push({ label: 'Materials', value: sysl.length ? sysl.map(x => SYS[x.key].l + (x.sub && SYS[x.key].subs.length ? ' · ' + ((SYS[x.key].subs.find(q => q[0] === x.sub) || [])[1] || '') : '')).join(' + ') : '—', onEdit: at(d === 'guided' ? 'looks2' : 'systems3') });
+    if (d === 'guided') rows.push({ label: 'Mood', value: [L(TONE, s.tone), L(GLASS, s.glass), L(CONTRAST, s.contrast)].filter(Boolean).join(' · ') || 'AI decides', onEdit: at('looks2') });
+    if (d !== 'inspo') { const pal = s.palette ? (PALETTES.find(p => p.k === s.palette) || {}).l : [s.c1, s.c2, s.c3].filter(Boolean).map(c => c.name).join(', '); rows.push({ label: 'Colour & finish', value: [pal, L(FINISH, s.finish), L(PATTERN, s.pattern)].filter(Boolean).join(' · ') || 'AI decides', onEdit: at(d === 'guided' ? 'colour2' : 'colour3') }); }
+    rows.push({ label: 'Lighting & sign', value: (d === 'inspo' ? L(RENDER, s.renderTime) : L(LIGHT2, s.lighting)) + ' · ' + (s.signOn ? L(SIGN_T, s.signType) + (s.signText ? ' “' + s.signText + '”' : '') : 'No sign'), onEdit: at(d === 'inspo' ? 'final1' : d === 'guided' ? 'details2' : 'glazing3') });
+    if (s.avoid.length) { const A = d === 'inspo' ? AVOID1 : d === 'guided' ? AVOID2 : AVOID3; rows.push({ label: 'Avoid', value: s.avoid.map(k => L(A, k)).join(', '), onEdit: at(d === 'inspo' ? 'inspo1' : d === 'guided' ? 'last2' : 'brief3') }); }
+    rows.push({ label: 'Investment', value: (s.budgetUnsure ? 'Not sure yet' : TIER[this.tier()]) + ' · ' + this.complexity() + ' detailing', onEdit: at(d === 'inspo' ? 'final1' : d === 'guided' ? 'last2' : 'brief3') });
+    return rows;
+  }
+  /* ---------- render ---------- */
+  renderVals() {
+    const s = this.state, vw = s.vw, vh = s.vh, phone = vw < 640, split = vw >= 1000, steps = this.steps(), n = steps.length, inFlow = !!s.door, isRes = inFlow && s.step >= n, st = steps[s.step] || {}, door = DOORS[s.door];
+    const hdrIn = phone ? 54 : 60, hdrH = hdrIn + (phone ? 16 : 20);
+    const L = { hdrPad: phone ? '8px 8px 8px' : '12px clamp(12px, 2vw, 24px) 8px', hdrIn, logoSrc: vw < 380 ? 'site/brand/logo-mark-128.webp' : 'site/brand/logo-header-320.webp', logoH: vw < 380 ? 30 : phone ? 19 : 24, showTitle: vw >= 720, showDoor: vw >= 900 && inFlow,
+      introPad: phone ? '8px 16px 48px' : '20px clamp(20px, 3vw, 40px) 72px', introGap: phone ? 40 : 64, heroCols: vw >= 960 ? 'minmax(0, 1.05fr) minmax(0, .95fr)' : 'minmax(0, 1fr)', heroAR: vw >= 960 ? '5 / 4' : '16 / 10', railCol: phone ? '72%' : vw < 1000 ? '38%' : 'clamp(220px, 19%, 280px)',
+      cols: split ? 'minmax(0, 1fr) clamp(330px, 36vw, 540px)' : 'minmax(0, 1fr)', gap: split ? Math.round(clamp(vw * .03, 24, 48)) : phone ? 10 : 18, pad: phone ? '0 12px' : split ? '4px clamp(20px, 3vw, 40px) 0' : '4px 24px 0',
+      pvOrder: split ? 2 : 0, qOrder: 1, pvPos: split || (phone && !s.pvOpen) ? 'sticky' : 'relative', pvTop: split ? hdrH : phone && !s.pvOpen ? hdrH - 6 : 0, pvH: split ? 'calc(100vh - ' + (hdrH + 16) + 'px)' : 'auto', pvOverflow: split ? 'auto' : 'visible',
+      pvBar: phone, pvFull: !phone || s.pvOpen, stageFlex: split ? '1 1 auto' : 'none', stageAR: split ? 'auto' : '16 / 10', stageMin: split ? 240 : 0, stageMaxH: split ? 'none' : phone ? '48vh' : '46vh',
+      fullProgress: !phone, miniProgress: phone, navPos: phone ? 'fixed' : 'sticky', navPad: phone ? '10px 14px calc(10px + env(safe-area-inset-bottom))' : '14px 0 18px', navBg: phone ? 'rgba(243,236,226,.94)' : 'linear-gradient(rgba(225,212,194,0), #E1D4C2 28%)', navBt: phone ? '1px solid rgba(41,28,14,.14)' : '0', navBlur: phone ? 'blur(12px)' : 'none', navAlign: phone ? 'center' : 'left', nextFlex: phone ? '1 1 auto' : '0 1 auto', qPadB: phone ? 130 : 24, toastB: phone && inFlow && !isRes ? 130 : 28 };
+    const showIds = this.props.showIds ?? true, units = this.props.units || 'sq ft';
+    const I = { hero: this.im('hero-facade'), hasDraft: !!s.draft && !inFlow, draftText: s.draft ? 'You have a design in progress — ' + ((DOORS[s.draft.door] || {}).name || '') + ', step ' + (Math.min(s.draft.step, ((DOORS[s.draft.door] || {}).steps || []).length - 1) + 1) + '.' : '', onResume: () => { const d = s.draft; this.paths = []; this.setState(Object.assign(this.fresh(), d, { draft: null, gen: null, step: Math.min(d.step, DOORS[d.door].steps.length - 1) })); }, onDiscard: () => { try { localStorage.removeItem(KEY); } catch (e) {} this.setState({ draft: null }); },
+      doors: [['inspo', 'Door 1 · Inspiration', 'I already have a look I love', 'Bring a Pinterest, Instagram or street photo. Our AI studies its materials and colours and carries them onto your building.', 'About 60 seconds', 'door-inspiration', 'Use my inspiration'], ['guided', 'Door 2 · Guided', 'Guide me', 'Plain English, zero jargon. Pick the looks, moods and colours you like — we match them to real Terucon systems.', 'About 2 minutes', 'door-guided', 'Start guided'], ['expert', 'Door 3 · Expert', 'Full specification', 'For architects and consultants: facade systems, zone mapping, RAL codes, visual specs and BOQ engineering grades.', 'About 5 minutes', 'door-expert', 'Open expert mode']].map(d => { const go = () => this.startDoor(d[0]); return Object.assign({ eyebrow: d[1], label: d[2], sub: d[3], time: d[4], cta: d[6], onClick: go, onKey: keyAct(go) }, this.im(d[5])); }),
+      systems: SYS_KEYS.map(k => { const go = () => this.startFromSystem(k); return Object.assign({ label: SYS[k].l, sub: SYS[k].s, onClick: go, onKey: keyAct(go) }, this.im('system-' + k)); }) };
+    if (!inFlow) return { L, isIntro: true, inFlow: false, I, onHome: () => {}, onExit: () => {}, doorLabel: '', blocks: [], progress: [], hasToast: !!s.toast, toast: s.toast, maskRef: this.maskRef, glRef: this.glRef };
+    let blocks = isRes ? (s.quote && !s.sent ? this.quoteBlocks() : []) : this.stepBlocks(st.k);
+    blocks.forEach(b => { b.showId = showIds && !!b.qid; b.hasMeta = b.showId || b.hasTag; });
+    const e = this.est(), area = units === 'm²' ? '~' + n0(e.m2) + ' m²' : '~' + n0(e.sqft) + ' sq ft';
+    const est = { areaLabel: 'Facade area ' + area, range: inrRange(e.lo, e.hi), short: inrRange(e.lo, e.hi) + ' · ' + area, note: e.tierName + ' · supply + install incl. GST' + (e.typical ? ' · typical materials until you choose' : ''), open: s.estOpen, onToggle: () => this.flip('estOpen'), toggleLabel: s.estOpen ? 'Hide breakdown' : 'See breakdown', lines: e.lines };
+    const mode = this.pvMode(), brush = mode === 'photo' && (st.k === 'basics1' || st.k === 'scope2' || st.k === 'scope3') && (s.door === 'expert' ? s.zones3 : s.zones).indexOf('brush') >= 0;
+    const tabs = []; if (s.photo) tabs.push(['photo', 'Photo']); if (s.door === 'inspo' && s.ref && s.photo) tabs.push(['ref', 'Side by side']); tabs.push(['3d', '3D model']);
+    const refImg = s.ref ? (s.ref.url || (INSPO.find(x => x.k === s.refInspo) ? s.imgs[INSPO.find(x => x.k === s.refInspo).img] : '') || '') : '';
+    const cap = s.gen ? 'Rendering your designs…' : brush ? 'Brush over the areas to redesign' : mode === 'photo' ? (isRes ? 'Before · your photo' : 'Your photo · windows & doors locked') : mode === '3d' ? this.cap3d() : '';
+    const sysl = this.sysList(), brief = sysl.map((x, i) => ({ label: SYS[x.key].l, dot: this.colourFor(x.key, i), hasDot: true })); if (s.btype) brief.unshift({ label: TYPE(s.btype).l + ' · ' + (s.floors === 1 ? 'G' : 'G+' + (s.floors - 1)), hasDot: false, dot: '' }); if (s.signOn) brief.push({ label: 'Signage', hasDot: false, dot: '' });
+    const pv = { open: s.pvOpen, onToggle: () => this.flip('pvOpen'), toggleLabel: s.pvOpen ? 'Hide' : 'Preview', chev: s.pvOpen ? 180 : 0, hasThumb: !!(s.photo && s.photo.url), thumb: s.photo ? s.photo.url : '',
+      isPhoto: mode === 'photo', isRef: mode === 'ref', is3d: mode === '3d', isEmpty: mode === 'empty', url: s.photo ? s.photo.url : '', ar: s.photo && s.photo.w ? (s.photo.w / s.photo.h).toFixed(4) : '1.5', refUrl: refImg, hasRefImg: !!refImg, brush, scan: !!s.gen || (s.door === 'inspo' && s.refState === 'reading' && mode !== '3d'),
+      fxMsg: !s.fx, fxText: s.fxErr || 'Loading the 3D model…', onDay: () => this.set('dusk', false), onDusk: () => this.set('dusk', true), dayBg: s.dusk ? 'transparent' : CR, dayInk: s.dusk ? CR : INK, duskBg: s.dusk ? CR : 'transparent', duskInk: s.dusk ? INK : CR, onSample: () => this.useSample(), barText: [s.btype ? TYPE(s.btype).l + ' · ' + (s.floors === 1 ? 'G' : 'G+' + (s.floors - 1)) : 'Your building', sysl.map(x => SYS[x.key].l).join(' + ')].filter(Boolean).join(' · '), fxReady: mode === '3d' && !!s.fx, onZoomIn: () => { if (this.viewer) this.viewer.zoomBy(.8); }, onZoomOut: () => { if (this.viewer) this.viewer.zoomBy(1.25); }, onReset: () => { if (this.viewer) this.viewer.reset(); },
+      hasTabs: tabs.length > 1, tabs: tabs.map(([k, l]) => ({ label: l, on: mode === k, onClick: () => this.set('pvTab', k), bg: mode === k ? CR : 'transparent', ink: mode === k ? INK : CR })), hasCaption: !!cap && !(mode === '3d' && !s.fx), caption: cap, canClear: brush && s.strokes > 0, onClear: () => this.clearMask(), showBrief: brief.length > 0 && (!split || vh >= 820), brief };
+    const progress = steps.map((x, i) => ({ label: (i + 1) + ' ' + x.name, onClick: () => { if (i <= s.maxStep) this.goStep(i); }, cursor: i <= s.maxStep ? 'pointer' : 'default', cur: i === s.step ? 'step' : 'false', bar: i < s.step || isRes ? INK2 : i === s.step ? INK : 'rgba(41,28,14,.16)', ink: i === s.step ? INK : i <= s.maxStep ? INK2 : 'rgba(41,28,14,.4)' })).concat([{ label: 'Designs', onClick: () => { if (s.maxStep >= n) this.goStep(n); }, cursor: s.maxStep >= n ? 'pointer' : 'default', cur: isRes ? 'step' : 'false', bar: isRes ? INK : 'rgba(41,28,14,.16)', ink: isRes ? INK : 'rgba(41,28,14,.4)' }]);
+    const [ok, msg] = this.canNext(), last = s.step === n - 1;
+    const nav = { onBack: () => this.back(), backLabel: s.step === 0 ? (phone ? 'Doors' : 'Change door') : 'Back', onNext: () => this.next(), nextLabel: last ? 'Create my 4 designs' : 'Continue', op: ok ? 1 : .5, disabled: ok ? 'false' : 'true', hasMsg: !ok, msg };
+    const gs = this.genStages(), gi = s.gen ? s.gen.i : gs.length; const gen = { pct: Math.round((gi + .5) / gs.length * 100), stages: gs.map((g, i) => ({ label: g, op: i <= gi ? 1 : .4, dot: i < gi ? AMB : i === gi ? CR : 'rgba(244,236,224,.25)' })) };
+    const v = VARS[s.variant], rim = this.im('result-' + v[0]), before = s.view === 'before' && s.photo;
+    const res = Object.assign({}, before ? { img: s.photo.url, hasImg: true, isPh: false, hasPh: false, canCopy: false } : rim, { label: before ? 'Before · your photo' : v[1] + ' · design ' + (s.variant + 1) + ' of 4', onAfter: () => this.set('view', 'after'), onBefore: () => this.set('view', 'before'), afterBg: before ? 'transparent' : CR, afterInk: before ? CR : INK, beforeBg: before ? CR : 'transparent', beforeInk: before ? INK : CR,
+      vars: VARS.map((x, i) => { const r = this.im('result-' + x[0]); return { label: x[1], sub: x[2], img: r.img, hasImg: r.hasImg, on: s.variant === i, bd: s.variant === i ? INK : 'rgba(41,28,14,.12)', onClick: () => this.setState({ variant: i, view: 'after' }) }; }),
+      desc: v[1] + ' interpretation of your brief — ' + v[2].toLowerCase() + '. Built only from ' + (sysl.length ? sysl.map(x => SYS[x.key].l).join(', ') : 'Terucon catalogue systems') + '; existing windows and doors untouched.' + (s.door === 'inspo' && s.transfer.length ? ' Carries over ' + s.transfer.map(k => (TRANSFER.find(q => q[0] === k) || [])[1].replace(/^The /, '').toLowerCase()).join(', ') + ' from your inspiration.' : ''),
+      onQuote: () => { this.setState({ quote: true }); this.later(() => { const el = document.getElementById('q-quotehead'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); }, 80); }, onSave: () => { let list = []; try { list = JSON.parse(localStorage.getItem('terucon.facade.saved') || '[]'); } catch (x) {} list.unshift({ at: new Date().toISOString(), variant: v[1], brief: this.payload() }); try { localStorage.setItem('terucon.facade.saved', JSON.stringify(list.slice(0, 10))); } catch (x) {} this.toast('Design saved in this browser.'); },
+      onEdit: () => this.goStep(n - 1), onJson: () => this.flip('showJson'), jsonLabel: s.showJson ? 'Hide AI input' : 'View AI input', showJson: s.showJson && isRes, json: isRes && s.showJson ? JSON.stringify(this.payload(), null, 2) : '', onCopyJson: () => this.copyText(JSON.stringify(this.payload(), null, 2), 'AI input copied.'), sent: s.sent });
+    return { L, isIntro: false, inFlow: true, I, onHome: () => this.exit(), onExit: () => this.exit(), doorLabel: door.id + ' · ' + door.name, blocks, progress, progPct: Math.round((Math.min(s.step, n) + (isRes ? 1 : .5)) / (n + 1) * 100),
+      stepLine: isRes ? door.name + ' · Your designs' : door.name + ' · Step ' + (s.step + 1) + ' of ' + n, stepT: isRes ? (s.gen ? 'Creating your' : 'Your building,') : st.t, stepEm: isRes ? (s.gen ? 'four designs.' : 'reimagined.') : st.em, stepSub: isRes ? (s.gen ? 'This takes a few moments.' : 'Four interpretations of your brief and an approximate estimate. Compare them, then request a quotation.') : st.sub,
+      isGen: isRes && !!s.gen, gen, isResults: isRes && !s.gen && s.done, res, showNav: !isRes, nav, pv, est, glRef: this.glRef, maskRef: this.maskRef, hasToast: !!s.toast, toast: s.toast };
+  }
+  quoteBlocks() {
+    const s = this.state, out = []; out.push(B(Object.assign({ key: 'quotehead', isNote: true, notes: [{ t: 'A few engineering questions firm up your BOQ — skip anything you’re unsure about.' }] }, H('BOQ · Tier B', 'Request your quotation', 'These answers only affect pricing and engineering — never how the design looks.'))));
+    if (!(s.door === 'expert' && s.boqOpen)) out.push(...this.tierB());
+    out.push(B({ key: 'contact', isFields: true, part: 'Where should we send it?', first: false, fields: [{ label: 'Your name', value: s.contact.name, ph: 'Full name', mode: 'text', type: 'text', onChange: e => this.setContact('name', e.target.value) }, { label: 'Mobile', value: s.contact.phone, ph: '+91', mode: 'tel', type: 'tel', onChange: e => this.setContact('phone', e.target.value) }, { label: 'Email (optional)', value: s.contact.email, ph: 'name@company.com', mode: 'email', type: 'email', onChange: e => this.setContact('email', e.target.value) }] }));
+    out.push(B({ key: 'send', isAction: true, isBtn: true, isFile: false, label: 'Send quotation request', bg: INK, ink: CR, hasNote: true, note: 'No obligation · we reply within one working day', onClick: () => { if (!s.contact.name.trim() || s.contact.phone.replace(/\D/g, '').length < 10) { this.toast('Please add your name and a 10-digit mobile number.'); return; } this.setState({ sent: true, quote: false }); window.scrollTo({ top: 0, behavior: 'smooth' }); } }));
+    return out;
+  }
+}
+</script>
+</body>
+</html>
